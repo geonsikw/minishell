@@ -60,7 +60,7 @@ void	skip_spaces(char **str)
 
 int	count_args(char *str)
 {
-	int		n;
+	int	n;
 
 	n = 0;
 	skip_spaces(&str);
