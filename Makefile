@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/09/17 20:05:58 by jihkwon           #+#    #+#              #
+#    Updated: 2021/09/18 11:43:23 by jihkwon          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME			= minishell
 
 CC				= gcc
@@ -34,10 +46,13 @@ all : $(NAME)
 $(NAME) : $(OBJS)
 	make all -C $(LIBFT_DIR)
 ifdef LINUX
-	$(CC) $(CFLAGS) -o $(NAME) -I $(INC_DIR) $^ -L $(LIBFT_DIR) -lft -lreadline
+	$(CC) $(CFLAGS) -o $(NAME) $^ -L $(LIBFT_DIR) -lft -lreadline
 else
-	$(CC) $(CFLAGS) -o $(NAME) -I $(INC_DIR) $^ -L $(LIBFT_DIR) -lft -L $(RL_DIR) -lreadline
+	$(CC) $(CFLAGS) -o $(NAME) $^ -L $(LIBFT_DIR) -lft -L $(RL_DIR) -lreadline
 endif
+
+%.o : %.c
+	$(CC) $(CFLAGS) -c -o $@ -I $(INC_DIR) $^
 
 fclean : clean
 	$(RM) $(NAME)

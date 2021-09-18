@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:27:12 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/17 10:15:31 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/17 21:14:53 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,23 +114,26 @@ int	initial_settings(void)
 	return (0);
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int ac, char **av, char **envp)
 {
 	t_data	p;
 
-	if (argc != 1 || initial_settings() < 0)
+	if (ac != 1 || initial_settings() < 0)
 		return (1);
-	init_p(&p, argv, envp);
+	init_p(&p, av, envp);
 	while (1)
 	{
-		p.str = readline("prompt> ");
+		p.str = readline("prompt$ ");
 		if (!p.str)
 		{
+			free(p.export);
+			free_matrix(p.envp);
 			ft_putendl_fd("exit", 1);
 			return (0);
 		}
 		if (p.str[0])
 			add_history(p.str);
 		parser(&p);
+		free(p.str);
 	}
 }
