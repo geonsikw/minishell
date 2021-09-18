@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:27:12 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/17 21:14:53 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/18 15:20:00 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,17 +76,6 @@ int	main(int ac, char **av, char **envp)
 }
 */
 
-void	sig_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
-}
-
 void	init_p(t_data *p, char **av, char **envp)
 {
 	p->envp = copy_env(envp, 0);
@@ -97,33 +86,30 @@ void	init_p(t_data *p, char **av, char **envp)
 	p->child = 0;
 }
 
-int	initial_settings(void)
+void	config_terminal(void)
 {
 	struct termios	t;
 
 	rl_catch_signals = 0;
-	if (signal(SIGINT, sig_handler) == SIG_ERR)
-		return (-1);
-	if (signal(SIGQUIT, sig_handler) == SIG_ERR)
-		return (-1);
-	if (isatty(0) && tcgetattr(0, &t) < 0)
-		return (-1);
+	tcgetattr(0, &t);
 	t.c_lflag &= ~ECHOCTL;
-	if (isatty(0) && tcsetattr(0, TCSANOW, &t) < 0)
-		return (-1);
-	return (0);
+	tcsetattr(0, TCSANOW, &t);
 }
 
 int	main(int ac, char **av, char **envp)
 {
 	t_data	p;
 
-	if (ac != 1 || initial_settings() < 0)
+	if (ac != 1)
 		return (1);
+	config_terminal();
+	signal(SIGQUIT, nop);
 	init_p(&p, av, envp);
 	while (1)
 	{
+		signal(SIGINT, prompt_on_newline);
 		p.str = readline("prompt$ ");
+		signal(SIGINT, print_nl);
 		if (!p.str)
 		{
 			free(p.export);

@@ -6,7 +6,7 @@
 #    By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/09/17 20:05:58 by jihkwon           #+#    #+#              #
-#    Updated: 2021/09/18 11:43:23 by jihkwon          ###   ########.fr        #
+#    Updated: 2021/09/18 15:12:10 by jihkwon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,8 @@ SRC				= main.c \
 				  builtins.c \
 				  cd.c \
 				  utils.c \
-				  utils2.c
+				  utils2.c \
+				  signal_handler.c \
 
 OBJ				= $(SRC:.c=.o)
 
