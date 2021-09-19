@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 15:47:38 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/19 19:28:36 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <stdio.h>
 
 typedef struct s_data{
 	int		ac;
@@ -35,8 +36,6 @@ typedef struct s_data{
 
 void				free_matrix(char **matrix);
 void				set_args(char **av, char *str, int ac);
-void				child_sig_handler(int sig);
-void				child_sig_handler_bash(int sig);
 void				bash_command(t_data *p);
 void				cd_command(t_data *p);
 void				pwd_command(int fd);
@@ -56,16 +55,11 @@ char				**check_command(char *str, t_data *p);
 int					check_builtins(int fd, t_data *p);
 int					check_bin(int fd, t_data *p);
 int					count_args(char *str);
-int					ft_strlen_token(char *str);
 int					ft_strlen_env(char *str);
-int					ft_strlen_pipe(char *str);
 int					ft_strlen_char(char *str, char c);
-int					ft_strlen_arg_token(char *str, char c);
 int					check_export_error(char **av, int *i);
-int					is_token(char c);
 void				ft_addchr(char **str, char c);
 int					ft_putstrs_fd(char *before, char *str, char *after, int fd);
 void				free_matrix(char **matrix);
 void				ft_putstrlen_fd(char *s, int len, int fd);
-char				**ft_split_case(char *s, char c);
 #endif

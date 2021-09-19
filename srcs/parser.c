@@ -20,10 +20,10 @@ int	change_env(int i, int brace, char **str, t_data *p)
 	char	*env;
 	char	*aux;
 
-	brace = 0;
-	env = 0;
 	if ((*str)[i + 1] == '{')
 		brace = 1;
+	else
+		brace = 0;
 	if (ft_strlen_char(*str + i + 1, ':') < ft_strlen_env(*str + i + 1))
 		len = ft_strlen_char(*str + i + 1, ':') + 1;
 	else
@@ -32,6 +32,8 @@ int	change_env(int i, int brace, char **str, t_data *p)
 	aux = ft_strldup(*str + i + 1 + brace, len - 1 - brace * 2);
 	if (!ft_memcmp(aux, "?", 2))
 		env = ft_itoa(p->ret);
+	else
+		env = 0;
 	aft = ft_strdup(*str + i + len);
 	if (!env)
 		env = ft_strdup(get_env(p->envp, aux));

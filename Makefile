@@ -1,53 +1,53 @@
-NAME			= minishell
+NAME =	minishell
 
-CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror
-INCS			= .
-RM				= rm -f
-LIBC			= ar rc
+SRCS =	srcs/main.c\
+		srcs/parser.c\
+		srcs/pipe.c\
+		srcs/command.c\
+		srcs/args.c\
+		srcs/bin.c\
+		srcs/builtins.c\
+		srcs/cd.c\
+		srcs/export.c\
+		srcs/unset.c\
+		srcs/utils.c\
+		srcs/utils2.c\
+		srcs/exit.c\
 
-SRCS_DIR		= srcs
-LIBFT_DIR		= libft
-LIBFT_LIB		= libft.a
+OBJS = $(SRCS:.c=.o)
 
-SRC				= main.c \
-				  parser.c \
-				  pipe.c \
-				  command.c \
-				  args.c \
-				  bin.c \
-				  builtins.c \
-				  cd.c \
-				  export.c \
-				  unset.c \
-				  utils.c \
-				  utils2.c \
-				  exit.c
+CC = gcc
 
-OBJ				= $(SRC:.c=.o)
+CFLAGS = -Wall -Werror -Wextra
 
-SRCS			= $(addprefix $(SRCS_DIR)/, $(SRC))
-OBJS			= $(addprefix $(SRCS_DIR)/, $(OBJ))
+RM = rm -rf
+
+LIBFT = libft.a
+LIBFTDIR = libft/
+LIBFTLINK = -L $(LIBFTDIR) -lft
 
 
-all : $(NAME)
-	$(CC) $(CFLAGS) $(NAME) srcs/main.c -o minishell
+all:		$(NAME)
 
-$(NAME) : $(OBJS)
-	make all -C $(LIBFT_DIR)/
-	cp $(LIBFT_DIR)/$(LIBFT_LIB) $@
-	$(LIBC) $@ $^
-	
-fclean : clean
-	$(RM) $(NAME)
-	$(RM) minishell
-	make fclean -C $(LIBFT_DIR)
+$(NAME):	complib $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFTLINK)
 
-clean :
+complib:
+	$(MAKE) -C libft/
+
+%.o:		%.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+clean:
+	$(MAKE) -C $(LIBFTDIR) clean
 	$(RM) $(OBJS)
-	make clean -C $(LIBFT_DIR)
 
-re : fclean all
+fclean: clean
+	$(MAKE) -C $(LIBFTDIR) fclean
+	$(RM) $(OBJS)
+	$(RM) $(NAME)
 
-.PHONY		: all fclean clean re
-.SILENT		:
+re:		fclean all
+
+.PHONY:		all clean fclean re
+.SILENT:

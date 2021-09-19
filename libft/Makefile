@@ -39,7 +39,7 @@ FILES = ft_memset \
 		ft_isascii \
 		ft_isprint \
 		ft_isspace \
-		ft_toupperr \
+		ft_toupper \
 		ft_tolower \
 		ft_calloc \
 		ft_strdup \
