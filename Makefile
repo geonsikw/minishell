@@ -18,8 +18,11 @@ SRC				= main.c \
 				  bin.c \
 				  builtins.c \
 				  cd.c \
+				  export.c \
+				  unset.c \
 				  utils.c \
-				  utils2.c
+				  utils2.c \
+				  exit.c
 
 OBJ				= $(SRC:.c=.o)
 
@@ -37,6 +40,7 @@ $(NAME) : $(OBJS)
 	
 fclean : clean
 	$(RM) $(NAME)
+	$(RM) minishell
 	make fclean -C $(LIBFT_DIR)
 
 clean :

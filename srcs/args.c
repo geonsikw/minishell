@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 20:02:48 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:18:53 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/19 16:13:04 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@ char	**copy_args(t_data *p)
 	char	**args;
 
 	i = 0;
-	while (p->av[i])
+	while (p->av[i] && ft_memcmp(p->av[i], "<", 2))
 		i++;
 	args = ft_calloc(sizeof(char *), i + 1);
 	i = 0;
-	while (p->av[i])
+	while (p->av[i] && ft_memcmp(p->av[i], "<", 2))
 	{
 		args[i] = ft_strdup(p->av[i]);
 		i++;
@@ -47,7 +47,15 @@ int	ft_strlen_arg(char *str)
 	{
 		while (str[i] && !ft_isspace(str[i]) && str[i] != '<'
 			&& str[i] != '>' && str[i] != '|')
+		{
+			if (str[i] == '\'' || str[i] == '"')
+			{
+				i++;
+				if (!(str[i]))
+					return (i);
+			}
 			i++;
+		}
 	}
 	return (i);
 }
@@ -60,9 +68,11 @@ void	skip_spaces(char **str)
 
 int	count_args(char *str)
 {
-	int	n;
+	int		n;
 
 	n = 0;
+	if (!str)
+		return (1);
 	skip_spaces(&str);
 	while (*str)
 	{
@@ -79,13 +89,17 @@ void	set_args(char **av, char *str, int ac)
 	int		len;
 
 	i = 0;
-	skip_spaces(&str);
-	while (i < ac)
+	if (str)
 	{
-		len = ft_strlen_arg(str);
-		av[i] = ft_strldup(str, len);
-		i++;
-		str += len;
 		skip_spaces(&str);
+		while (i < ac)
+		{
+			len = ft_strlen_arg(str);
+			av[i] = ft_strldup(str, len);
+			rm_token(&(av[i]));
+			i++;
+			str += len;
+			skip_spaces(&str);
+		}
 	}
 }

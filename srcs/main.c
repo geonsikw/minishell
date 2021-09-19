@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:27:12 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:34:21 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/19 16:15:01 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ void	init_p(t_data **p, char **av, char **envp, int *str)
 	str[0] = 1;
 }
 
-int	main(int ac, char **av, char **envp)
+int	main(int argc, char **av, char **envp)
 {
 	t_data	*p;
 	int		str[2];
 	char	c;
 
-	if (ac != 1)
+	if (argc != 1)
 		return (1);
 	init_p(&p, av, envp, str);
 	signal(SIGQUIT, sig_handler);
@@ -66,6 +66,8 @@ int	main(int ac, char **av, char **envp)
 		str[1] = (int)ft_strlen(p->str);
 		if (c == '\n')
 			parser(p);
+		if (!str[0] && !str[1])
+			exit (0);
 	}
 	return (0);
 }

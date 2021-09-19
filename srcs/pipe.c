@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:11:16 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:35:27 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/19 17:40:54 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,19 @@ int	check_pipe(int *fds, t_data *p)
 	int		j;
 
 	sons = 0;
-	flag = (int *)calloc(sizeof(int), 2);
+	flag = (int *)malloc(sizeof(int) * 2);
 	flag[0] = 1;
+	flag[1] = 0;
 	j = 0;
 	while (p->av[j])
 	{
 		i = 0;
 		while (p->av[j + i] && ft_memcmp(p->av[j + i], "|", 2))
 			i++;
-		if (!p->av[j + i])
+		if (!p->av[i + j])
 			flag[1] = 1;
+		else
+			flag[1] = 0;
 		pipe_son(flag, fds, p, j);
 		sons++;
 		flag[0] = 0;
@@ -98,15 +101,17 @@ int	check_pipe(int *fds, t_data *p)
 void	command_or_pipe(t_data *p)
 {
 	int	fds[4];
+	int	std_out;
 	int	sons;
 	int	i;
 
+	std_out = dup(0);
 	i = 0;
 	while (p->av[i] && ft_memcmp(p->av[i], "|", 2))
 		i++;
 	if (!p->av[i])
 		p->envp = check_command(p->cmds, p);
-	else if (p->cmds[0])
+	else if (p->cmds)
 	{
 		pipe(&fds[0]);
 		pipe(&fds[2]);
@@ -118,4 +123,5 @@ void	command_or_pipe(t_data *p)
 		while (++i < 4)
 			close(fds[i]);
 	}
+	dup2(std_out, 0);
 }

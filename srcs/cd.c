@@ -6,26 +6,11 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 17:06:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:19:36 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/19 13:51:29 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**export_command(t_data *p, int j)
-{
-	int		i;
-	char	**cpy;
-
-	i = 0;
-	while (p->envp[i] && ft_memcmp(p->envp[i],
-			p->av[j], ft_strlen(p->av[j])))
-		i++;
-	cpy = p->envp;
-	free(p->envp[i]);
-	p->envp[i] = ft_strjoin(p->av[j], p->av[j + 1]);
-	return (cpy);
-}
 
 void	change_dir(char *path, t_data *p)
 {
@@ -33,12 +18,13 @@ void	change_dir(char *path, t_data *p)
 
 	if (chdir(path) == 0)
 	{
-		p->ac = 3;
+		p->ac = 4;
 		free_matrix(p->av);
-		p->av = (char **)ft_calloc(sizeof(char *), 3);
-		p->av[0] = ft_strdup("PWD=");
-		p->av[1] = ft_strdup(getcwd(cwd, 4096));
-		p->envp = export_command(p, 0);
+		p->av = (char **)ft_calloc(sizeof(char *), 4);
+		p->av[0] = ft_strdup("export");
+		p->av[1] = ft_strdup("PWD=");
+		p->av[2] = ft_strdup(getcwd(cwd, 4096));
+		p->envp = export_command(p, 1);
 	}
 	else
 		ft_putstrs_fd("bash: cd: ", p->av[1], ": ", 2);
@@ -51,7 +37,11 @@ void	cd_command(t_data *p)
 	errno = 0;
 	if (p->ac <= 2)
 	{
-		path = p->av[1];
+		if (!p->av[1] || !ft_strncmp(p->av[1], "--", 3)
+			|| !ft_strncmp(p->av[1], "~", 2))
+			path = get_env(p->envp, "HOME");
+		else
+			path = p->av[1];
 		change_dir(path, p);
 		if (errno > 0)
 		{
