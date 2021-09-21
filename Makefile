@@ -11,8 +11,8 @@ SRCS =	srcs/main.c\
 		srcs/export.c\
 		srcs/unset.c\
 		srcs/utils.c\
-		srcs/utils2.c\
-		srcs/exit.c\
+		srcs/len.c\
+		srcs/remove.c
 
 OBJS = $(SRCS:.c=.o)
 

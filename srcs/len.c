@@ -6,23 +6,11 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 22:38:11 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 13:12:20 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/21 20:59:32 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	ft_addchr(char **str, char c)
-{
-	char	*aux;
-
-	aux = ft_calloc(sizeof(char), ft_strlen(*str) + 2);
-	ft_memcpy(aux, *str, ft_strlen(*str));
-	aux[ft_strlen(aux)] = c;
-	if (*str)
-		free(*str);
-	*str = aux;
-}
 
 void	ft_putstrlen_fd(char *s, int len, int fd)
 {
@@ -36,18 +24,6 @@ void	ft_putstrlen_fd(char *s, int len, int fd)
 		write(fd, &s[i], 1);
 		i++;
 	}
-}
-
-void	free_matrix(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	if (!matrix)
-		return ;
-	while (matrix[i])
-		free(matrix[i++]);
-	free(matrix);
 }
 
 int	ft_strlen_char(char *str, char c)

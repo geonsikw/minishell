@@ -6,11 +6,35 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 17:06:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 13:51:29 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/21 20:29:49 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**export_command(t_data *p, int j)
+{
+	int		i;
+	char	**cpy;
+
+	i = 0;
+	while (p->envp[i] && ft_memcmp(p->envp[i],
+			p->av[j], ft_strlen(p->av[j])))
+		i++;
+	if (!p->envp[i])
+	{
+		cpy = copy_env(p->envp, 1);
+		cpy[i] = ft_strjoin(p->av[j], p->av[j + 1]);
+		free_matrix(p->envp);
+	}
+	else
+	{
+		cpy = p->envp;
+		free(p->envp[i]);
+		p->envp[i] = ft_strjoin(p->av[j], p->av[j + 1]);
+	}
+	return (cpy);
+}
 
 void	change_dir(char *path, t_data *p)
 {

@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 20:02:48 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 16:13:04 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/21 17:30:03 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,27 @@ char	**copy_args(t_data *p)
 	return (args);
 }
 
-int	ft_strlen_arg(char *str)
+int	ft_strlen_arg(char *s)
 {
 	int	i;
 
 	i = 0;
-	if (str[i] == '<' || str[i] == '>' || str[i] == '|')
+	if (s[i] == '<' || s[i] == '>' || s[i] == '|')
 	{
-		if ((str[i] == '>' && str[i + 1] == '>')
-			|| (str[i] == '<' && str[i + 1] == '<'))
+		if (s[i] == '>' && s[i + 1] == '>')
 			i = 2;
 		else
 			i = 1;
 	}
 	else
 	{
-		while (str[i] && !ft_isspace(str[i]) && str[i] != '<'
-			&& str[i] != '>' && str[i] != '|')
+		while (s[i] && !ft_isspace(s[i]) && s[i] != '<'
+			&& s[i] != '>' && s[i] != '|')
 		{
-			if (str[i] == '\'' || str[i] == '"')
+			if (s[i] == '\'' || s[i] == '"')
 			{
 				i++;
-				if (!(str[i]))
+				if (!(s[i]))
 					return (i);
 			}
 			i++;

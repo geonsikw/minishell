@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 19:28:36 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/21 21:08:20 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,4 +62,7 @@ void				ft_addchr(char **str, char c);
 int					ft_putstrs_fd(char *before, char *str, char *after, int fd);
 void				free_matrix(char **matrix);
 void				ft_putstrlen_fd(char *s, int len, int fd);
+char				*copy_str(char *s);
+void				free_p(t_data *p);
+void				free_var(char *a, char *b, char *c, char *d);
 #endif

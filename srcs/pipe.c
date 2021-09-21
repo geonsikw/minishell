@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:11:16 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 17:40:54 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/21 20:57:35 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,11 @@ void	switch_pipes(int *fds)
 int	check_pipe(int *fds, t_data *p)
 {
 	int		sons;
-	int		*flag;
+	int		flag[2];
 	int		i;
 	int		j;
 
 	sons = 0;
-	flag = (int *)malloc(sizeof(int) * 2);
 	flag[0] = 1;
 	flag[1] = 0;
 	j = 0;
@@ -81,20 +80,16 @@ int	check_pipe(int *fds, t_data *p)
 		i = 0;
 		while (p->av[j + i] && ft_memcmp(p->av[j + i], "|", 2))
 			i++;
-		if (!p->av[i + j])
+		if (!p->av[j + i])
 			flag[1] = 1;
-		else
-			flag[1] = 0;
 		pipe_son(flag, fds, p, j);
 		sons++;
 		flag[0] = 0;
 		switch_pipes(fds);
 		if (!p->av[j + i])
-			j += i;
-		else
-			j += i + 1;
+			break ;
+		j += i + 1;
 	}
-	free(flag);
 	return (sons);
 }
 

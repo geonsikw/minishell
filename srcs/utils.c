@@ -6,11 +6,23 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 13:11:06 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/21 20:59:26 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	ft_addchr(char **str, char c)
+{
+	char	*aux;
+
+	aux = ft_calloc(sizeof(char), ft_strlen(*str) + 2);
+	ft_memcpy(aux, *str, ft_strlen(*str));
+	aux[ft_strlen(aux)] = c;
+	if (*str)
+		free(*str);
+	*str = aux;
+}
 
 char	*get_env(char **envp, char *env)
 {
@@ -58,41 +70,4 @@ int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
 	if (after)
 		write(fd, after, ft_strlen(after));
 	return (1);
-}
-
-void	rm_char(char **str, int j)
-{
-	char	*bef;
-	char	*aux;
-
-	bef = ft_strldup(*str, j);
-	aux = ft_strdup(*str + j + 1);
-	free(*str);
-	*str = ft_strjoin(bef, aux);
-	free(aux);
-	free(bef);
-}
-
-void	rm_token(char **arg)
-{
-	int		i;
-
-	i = 0;
-	while ((*arg)[i])
-	{
-		if ((*arg)[i] == '\'')
-		{
-			rm_char(arg, i);
-			i += ft_strlen_char(*arg + i, '\'');
-			rm_char(arg, i);
-		}
-		else if ((*arg)[i] == '"')
-		{
-			rm_char(arg, i);
-			i += ft_strlen_char(*arg + i, '\"');
-			rm_char(arg, i);
-		}
-		else
-			i++;
-	}
 }

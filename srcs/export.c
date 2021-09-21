@@ -6,34 +6,18 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:23:51 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 13:10:29 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/21 20:42:20 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**export_command(t_data *p, int j)
+void	set_export(t_data *p, char **aux, int *i, int j)
 {
-	int		i;
-	char	**cpy;
-
-	i = 0;
-	while (p->envp[i] && ft_memcmp(p->envp[i],
-			p->av[j], ft_strlen(p->av[j])))
-		i++;
-	if (!p->envp[i])
-	{
-		cpy = copy_env(p->envp, 1);
-		cpy[i] = ft_strjoin(p->av[j], p->av[j + 1]);
-		free_matrix(p->envp);
-	}
-	else
-	{
-		cpy = p->envp;
-		free(p->envp[i]);
-		p->envp[i] = ft_strjoin(p->av[j], p->av[j + 1]);
-	}
-	return (cpy);
+	aux[j] = ft_strdup(p->av[*i]);
+	aux[j + 1] = 0;
+	free_matrix(p->export);
+	p->export = aux;
 }
 
 void	export_value(t_data *p, int *i)
@@ -50,10 +34,7 @@ void	export_value(t_data *p, int *i)
 		if (!p->export[j])
 		{
 			aux = copy_env(p->export, 1);
-			aux[j] = ft_strdup(p->av[*i]);
-			aux[j + 1] = 0;
-			free_matrix(p->export);
-			p->export = aux;
+			set_export(p, aux, i, j);
 		}
 		(*i)++;
 	}

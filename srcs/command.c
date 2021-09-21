@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:31:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 17:08:58 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/21 21:07:11 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ char	**check_command(char *str, t_data *p)
 		fd = set_fd(p);
 		copy_args1(p);
 		p->ret = check_builtins(fd, p);
-		if (p->ret == 127 && (p->ret = check_bin(fd, p)) == 127)
+		if (p->ret == 127 && check_bin(fd, p) == 127)
 		{
 			ft_putstrs_fd(0, str, ": command not found.\n", 2);
 			p->ret = 127;
