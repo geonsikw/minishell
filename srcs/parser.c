@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 20:02:38 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/21 21:13:58 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 16:59:49 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,115 @@ int	check_env(char **str, t_data *p)
 		i++;
 	}
 	return (0);
+}
+
+void	parse_undo(t_list **token_list, char **token, int *type, int type_saved)
+{
+}
+
+t_list	*parse_pipeline(char **token, int *type, char **line)
+{
+	t_list	*token_list;
+	int		type_saved;
+
+	type_saved = *type;
+	token_list = parse_command(token, type, line);
+	if (!token_list)
+		return (0);
+	if (type != '|')
+	{
+		parse_undo(&token_list, token, type, type_saved);
+		return (0);
+	}
+	ft_lstadd_front(&token_list, ft_lstnew(token));
+	if (get_token(&token, &type, &line) < 0)
+	{
+		parse_undo(&token_list, token, type, type_saved);
+		return (0);
+	}
+	token_list = parse_pipeline(token, type, line)
+}
+
+t_list	*parse(char *line)
+{
+	t_list	*token_list;
+	char	*token;
+	int		type;
+
+	if (get_token(&token, &type, &line) < 0)
+		return (0);
+	token_list = parse_pipeline(&token, &type, &line);
+	if (type != EOL)
+	{
+		free(token);
+		ft_lstclear(&token_list, free);
+		return (0);
+	}
+	ft_lstadd_front(&token_list, ft_lstnew(token));
+	return (token_list);
+}
+
+int	parse_redirection(t_list **token_list, char **token, int *type, char **line)
+{
+	if (type == '<' || type == '>' || type == DLESS || type == DGREAT)
+		ft_lstadd_front(token_list, ft_lstnew(token));
+	if (get_token(token, type, line) < 0)
+		return (-1);
+	if (type != WORD)
+		return (-1);
+	ft_lstadd_front(token_list, ft_lstnew(token));
+	return (get_token(token, type, line));
+}
+
+int	parse_command(t_list **token_list, char **token, int *type, char **line)
+{
+	if (type == WORD)
+		ft_lstadd_front(token_list, ft_lstnew(token));
+	else if (parse_redirection(token_list, token, type, line) < 0)
+		return (-1);
+	if (type == '|' || type == EOL)
+		return (0);
+	return (parse_command(token_list, token, type, line));
+}
+
+int	parse_pipeline(t_list **token_list, char **token, int *type, char **line)
+{
+	if (parse_command(token_list, token, type, line) < 0)
+		return (-1);
+	if (type != '|')
+		return (0);
+	ft_lstadd_front(token_list, ft_lstnew(token));
+	if (get_token(token, type, line) < 0)
+		return (-1);
+	return (parse_pipeline(token_list, token, type, line));
+}
+
+int	parse_line(t_list **token_list, char **token, int *type, char **line)
+{
+	if (type == EOL)
+	{
+		ft_lstadd_front(token_list, ft_lstnew(token));
+		return (0);
+	}
+	return (parse_pipeline(token_list, token, type, line));
+}
+
+t_list	*parse(char *line)
+{
+	t_list	*token_list;
+	char	*token;
+	int		type;
+
+	token_list = 0;
+	if (get_token(&token, &type, &line) < 0)
+		return (0);
+	if (parse_line(&token_list, &token, &type, &line) < 0)
+	{
+		free(token);
+		ft_lstclear(&token_list, free);
+		return (0);
+	}
+	return (token_list);
 }
 
 void	parser(t_data *p)

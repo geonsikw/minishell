@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/21 21:08:20 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/22 16:33:04 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,16 @@ void				ft_putstrlen_fd(char *s, int len, int fd);
 char				*copy_str(char *s);
 void				free_p(t_data *p);
 void				free_var(char *a, char *b, char *c, char *d);
+
+enum e_token_type
+{
+	EOL,
+	DLESS,
+	DGREAT,
+	WORD
+};
+
+int	isopchar(char c);
+int	isquotechar(char c);
+int	iswordchar(char c);
 #endif

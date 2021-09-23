@@ -33,7 +33,7 @@ $(NAME):	complib $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFTLINK)
 
 complib:
-	$(MAKE) -C libft/
+	$(MAKE) -C libft all bonus
 
 %.o:		%.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -50,4 +50,3 @@ fclean: clean
 re:		fclean all
 
 .PHONY:		all clean fclean re
-.SILENT:
