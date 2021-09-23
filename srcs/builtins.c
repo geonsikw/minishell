@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/23 22:32:56 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/24 01:12:46 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,19 @@ void	reset(t_data *p)
 	while (p->av[j])
 	{
 		i = 0;
-		while (p->av[j][i] != '=')
+		while (p->av[j][i] && p->av[j][i] != '=')
 			i++;
 		argv[2 * j - 1] = ft_strldup(p->av[j], i + 1);
 		argv[2 * j] = ft_strdup(p->av[j] + i + 1);
 		j++;
 	}
 	p->ac = argc;
-	p->av = argv;
+	i = 0;
+	while (i <= argc)
+	{
+		p->av[i] = ft_strdup(argv[i]);
+		i++;
+	}
 }	
 
 char	**multiple_env(t_data *p, int fd)
@@ -51,12 +56,17 @@ char	**multiple_env(t_data *p, int fd)
 	reset(p);
 	while (p->av[i])
 	{
+		printf("1. into while\n");
 		if (!ft_memcmp(p->av[0], "export", 7))
 		{
+			printf("2. into if\n");
 			if (check_export_error(p->av, &i))
 				p->ret = 1;
 			else
+			{
+				printf("aaaa\n");
 				export_value(p, &i);
+			}
 		}
 		else if (!ft_memcmp(p->av[0], "unset", 6))
 			p->envp = unset_command(p, i++);

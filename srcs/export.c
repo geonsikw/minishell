@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:23:51 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/23 17:24:41 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/24 00:52:02 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	export_value(t_data *p, int *i)
 			j++;
 		if (!p->export[j])
 		{
+			p->av[*i] = ft_strjoin(p->av[*i], "=");
 			aux = copy_env(p->export, 1);
 			set_export(p, aux, i, j);
 		}
@@ -53,8 +54,8 @@ int	check_export_error(char **av, int *i)
 	int	j;
 
 	j = 0;
-	while (ft_isalnum(av[*i][j]) || av[*i][j] == '_' ||
-			av[*i][j] == '#' || av[*i][j] == '=' || av[*i][j] == '$')
+	while (ft_isalnum(av[*i][j]) || av[*i][j] == '_'
+		|| av[*i][j] == '#' || av[*i][j] == '=' || av[*i][j] == '$')
 		j++;
 	if (ft_isdigit(av[*i][0]) || av[*i][j])
 	{
