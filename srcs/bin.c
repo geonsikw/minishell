@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:27:05 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/21 21:08:01 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 16:14:22 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ char	**split_path(t_data *p, char *str)
 		paths = ft_split(path, ':');
 	else
 	{
-		ft_putstrs_fd("bash: ", str, ": No such file or directory\n", 2);
+		ft_putstrs_fd("iiiibash: ", str, ": No such file or directoryyy\n", 2);
 		p->ret = 127;
 		return (NULL);
 	}

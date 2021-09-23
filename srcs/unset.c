@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:24:41 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/19 11:25:55 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/22 16:52:00 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	**unset_command(t_data *p, int j)
 
 	if (p->ac < 2)
 		return (p->envp);
-	len = strlen(p->av[j]);
+	len = ft_strlen(p->av[j]);
 	env = ft_strjoin(p->av[j], "=");
 	i = 0;
 	while (p->envp[i] && ft_memcmp(env, p->envp[i], len + 1))

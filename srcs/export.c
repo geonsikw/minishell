@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:23:51 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/21 20:42:20 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 16:15:45 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	export_value(t_data *p, int *i)
 {
 	char	**aux;
 	int		j;
-
+	
 	if (!ft_strchr(p->av[*i], '='))
 	{
 		j = 0;
@@ -83,9 +83,10 @@ void	put_envp(char **aux, int fd)
 	i = -1;
 	while (aux[++i])
 	{
+		ft_putstr_fd("declare -x ", fd);
 		ft_putstrlen_fd(aux[i], ft_strlen_char(aux[i], '=') + 1, fd);
 		if (ft_strchr(aux[i], '='))
-			ft_putstr_fd(ft_strchr(aux[i], '=') + 1, fd);
+			ft_putstrs_fd("\"", ft_strchr(aux[i], '=') + 1, "\"", fd);
 		write(fd, "\n", 1);
 	}
 	free_matrix(aux);

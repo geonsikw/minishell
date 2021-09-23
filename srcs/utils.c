@@ -6,12 +6,26 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/21 20:59:26 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/22 21:33:07 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
+void	child_sig_handler(int sig)
+{
+	if (sig == SIGINT)
+		write(2, "\n", 1);
+}
+*/
+void	child_sig_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		write(2, "\n", 1);
+		exit(0);
+	}
+}
 void	ft_addchr(char **str, char c)
 {
 	char	*aux;

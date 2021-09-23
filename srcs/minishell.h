@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/21 21:08:20 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 16:13:53 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
-# include <stdio.h>
 
 typedef struct s_data{
 	int		ac;
@@ -36,7 +35,6 @@ typedef struct s_data{
 
 void				free_matrix(char **matrix);
 void				set_args(char **av, char *str, int ac);
-void				bash_command(t_data *p);
 void				cd_command(t_data *p);
 void				pwd_command(int fd);
 void				exit_command(t_data *p);
@@ -65,4 +63,9 @@ void				ft_putstrlen_fd(char *s, int len, int fd);
 char				*copy_str(char *s);
 void				free_p(t_data *p);
 void				free_var(char *a, char *b, char *c, char *d);
+void				skip_spaces(char **str);
+void				excutable(t_data *param);
+int					gnl(int fd, char **line);
+void				child_sig_handler(int sig);
+void				reset(t_data *p);
 #endif
