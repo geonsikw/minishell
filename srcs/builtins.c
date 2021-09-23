@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/23 16:13:05 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 17:21:40 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,15 @@ char	**multiple_env(t_data *p, int fd)
 	reset(p);
 	while (p->av[i])
 	{
-			if (!ft_memcmp(p->av[0], "export", 7))
-			{
-				if (check_export_error(p->av, &i))
-					p->ret = 1;
-				else
-					export_value(p, &i);
-			}
-			else if (!ft_memcmp(p->av[0], "unset", 6))
-				p->envp = unset_command(p, i++);
+		if (!ft_memcmp(p->av[0], "export", 7))
+		{
+			if (check_export_error(p->av, &i))
+				p->ret = 1;
+			else
+				export_value(p, &i);
+		}
+		else if (!ft_memcmp(p->av[0], "unset", 6))
+			p->envp = unset_command(p, i++);
 	}
 	return (p->envp);
 }
@@ -101,7 +101,7 @@ void	env_command(t_data *p, int fd)
 
 int	n_check(t_data *p, int i)
 {
-	char *d;
+	char	*d;
 
 	d = p->av[1 + i] + 2;
 	if (!ft_memcmp(p->av[1 + i], "-n", 2))
@@ -156,8 +156,8 @@ int	check_builtins(int fd, t_data *p)
 	else if (!ft_memcmp(p->av[0], "exit", 5))
 		exit_command(p);
 	else if (!ft_memcmp(p->av[0], "./", 2)
-			|| !ft_memcmp(p->av[0], "../", 3)
-			|| !ft_memcmp(p->av[0], "/", 1))
+		|| !ft_memcmp(p->av[0], "../", 3)
+		|| !ft_memcmp(p->av[0], "/", 1))
 		excutable(p);
 	else
 		return (127);

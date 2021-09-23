@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 21:06:44 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/23 15:04:11 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 17:24:20 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ int	check_errno(t_data *p, char *str)
 	{
 		ft_putstrs_fd("bash: ", str, ": ", 2);
 		ft_putstrs_fd(strerror(errno), "\n", 0, 2);
-		p->ret = (errno == ENOENT) ? 127 : 126;
+		p->ret = 126;
+		if (errno == ENOENT)
+			p->ret = 127;
 		return (1);
 	}
 	return (0);
@@ -97,7 +99,7 @@ void	set_path(char *str, char **path)
 	free(new);
 }
 
-void		excutable(t_data *p)
+void	excutable(t_data *p)
 {
 	char	buff[4097];
 	char	*path;
@@ -105,7 +107,8 @@ void		excutable(t_data *p)
 
 	start = p->av[0];
 	if (ft_memcmp(p->av[0], "/", 1))
-		p->av[0] += (!ft_memcmp(p->av[0], "./", 2)) ? 2 : 0;
+		if (!ft_memcmp(p->av[0], "./", 2))
+			p->av[0] += 2;
 	path = getcwd(buff, 4096);
 	set_path(p->av[0], &path);
 	if (!fork())

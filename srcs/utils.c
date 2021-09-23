@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/22 21:33:07 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 17:25:35 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	child_sig_handler(int sig)
 		exit(0);
 	}
 }
+
 void	ft_addchr(char **str, char c)
 {
 	char	*aux;
