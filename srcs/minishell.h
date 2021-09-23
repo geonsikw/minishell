@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/23 18:27:59 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 22:34:05 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,4 @@ void				skip_spaces(char **str);
 void				excutable(t_data *param);
 int					gnl(int fd, char **line);
 void				child_sig_handler(int sig);
-void				reset(t_data *p);
 #endif

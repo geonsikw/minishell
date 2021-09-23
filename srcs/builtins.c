@@ -6,11 +6,35 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/23 17:21:40 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 22:32:56 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	reset(t_data *p)
+{
+	int		i;
+	int		j;
+	int		argc;
+	char	**argv;
+
+	j = 1;
+	argc = (p->ac - 1) * 2 + 1;
+	argv = (char **)ft_calloc(sizeof(char *), (argc + 1));
+	argv[0] = p->av[0];
+	while (p->av[j])
+	{
+		i = 0;
+		while (p->av[j][i] != '=')
+			i++;
+		argv[2 * j - 1] = ft_strldup(p->av[j], i + 1);
+		argv[2 * j] = ft_strdup(p->av[j] + i + 1);
+		j++;
+	}
+	p->ac = argc;
+	p->av = argv;
+}	
 
 char	**multiple_env(t_data *p, int fd)
 {

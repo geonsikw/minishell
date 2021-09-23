@@ -15,7 +15,6 @@ SRCS =	srcs/main.c\
 		srcs/remove.c\
 		srcs/excutable.c\
 		srcs/gnl.c\
-		srcs/reset.c
 
 OBJS = $(SRCS:.c=.o)
 
