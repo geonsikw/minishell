@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/23 16:13:53 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 18:27:59 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include <sys/stat.h>
+# include <stdio.h>
 
 typedef struct s_data{
 	int		ac;
