@@ -11,13 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*
-void	child_sig_handler(int sig)
-{
-	if (sig == SIGINT)
-		write(2, "\n", 1);
-}
-*/
+
 void	child_sig_handler(int sig)
 {
 	if (sig == SIGINT)

@@ -58,38 +58,7 @@ int	ft_strlen_arg(char *s)
 	}
 	return (i);
 }
-/*
-int	ft_strlen_arg(char *s)
-{
-	int	i;
 
-	i = 0;
-	if (s[i] == '<' || s[i] == '>' || s[i] == '|' || s[i] == '=')
-	{
-		if (s[i] == '>' && s[i + 1] == '>')
-			i = 2;
-		else
-			i = 1;
-	}
-	else
-	{
-		while (s[i] && !ft_isspace(s[i]) && s[i] != '<'
-			&& s[i] != '>' && s[i] != '|' && s[i] != '=')
-		{
-			if (s[i] == '\'' || s[i] == '"')
-			{
-				i++;
-				if (!(s[i]))
-					return (i);
-			}
-			i++;
-		}
-		if (s[i] == '=')
-			i++;
-	}
-	return (i);
-}
-*/
 void	skip_spaces(char **str)
 {
 	while (**str == ' ' || (9 <= **str && **str <= 13))
