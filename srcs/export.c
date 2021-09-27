@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:23:51 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/27 13:44:25 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/27 15:21:52 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ int	check_export_error(char **av, int *i)
 
 	j = 0;
 	while (ft_isalnum(av[*i][j]) || av[*i][j] == '_'
-		|| av[*i][j] == '#' || av[*i][j] == '=' || av[*i][j] == '$')
+		|| av[*i][j] == '$' || av[*i][j] == '=')
 		j++;
-	if (ft_isdigit(av[*i][0]) || av[*i][j])
+	if (av[*i][0] == '=' || ft_isdigit(av[*i][0]) || av[*i][j])
 	{
 		if (ft_strchr(av[*i], '='))
 		{
