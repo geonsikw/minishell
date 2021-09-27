@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/24 01:12:46 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/27 13:45:13 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,17 +56,12 @@ char	**multiple_env(t_data *p, int fd)
 	reset(p);
 	while (p->av[i])
 	{
-		printf("1. into while\n");
 		if (!ft_memcmp(p->av[0], "export", 7))
 		{
-			printf("2. into if\n");
 			if (check_export_error(p->av, &i))
 				p->ret = 1;
 			else
-			{
-				printf("aaaa\n");
 				export_value(p, &i);
-			}
 		}
 		else if (!ft_memcmp(p->av[0], "unset", 6))
 			p->envp = unset_command(p, i++);
