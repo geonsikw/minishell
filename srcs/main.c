@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:27:12 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/21 20:46:55 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/24 14:40:55 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ int	main(int argc, char **av, char **envp)
 		if (str[0])
 			put_prompt();
 		signal(SIGINT, sig_handler);
-		while ((str[0] = read(1, &c, 1)) && c != '\n')
+		while ((str[0] = (int)read(1, &c, 1)) && c != '\n')
 			ft_addchr(&(p->str), c);
 		str[1] = (int)ft_strlen(p->str);
-		if (c == '\n')
+		if (str[1] > 0)
 			parser(p);
 		if (!str[0] && !str[1])
 			exit (0);

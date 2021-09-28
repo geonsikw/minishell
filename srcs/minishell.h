@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/22 16:33:04 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/26 19:49:13 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,16 @@ enum e_token_type
 	WORD
 };
 
+enum e_parse_error
+{
+	ETOKEN = 1,
+	ESYNTAX
+};
+
 int	isopchar(char c);
 int	isquotechar(char c);
 int	iswordchar(char c);
+int	get_token(char **token, int *type, char **line);
+void	errmsg_syntax(char *token);
+void	expand_args(t_data *p);
 #endif

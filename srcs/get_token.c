@@ -15,7 +15,7 @@ int	get_token_len(char *line)
 	int	i;
 	int	qlen;
 
-	if (ft_strncmp(line, "<<", 2) == 0 || ft_strncmp(line, ">>", 2 == 0))
+	if (ft_strncmp(line, "<<", 2) == 0 || ft_strncmp(line, ">>", 2) == 0)
 		return (2);
 	if (isopchar(*line))
 		return (1);
@@ -55,8 +55,8 @@ int	get_token(char **token, int *type, char **line)
 	len = get_token_len(*line);
 	if (len < 0)
 		return (-1);
-	*line += len;
 	*token = ft_strldup(*line, len);
+	*line += len;
 	*type = get_token_type(*token);
 	return (0);
 }

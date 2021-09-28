@@ -12,7 +12,11 @@ SRCS =	srcs/main.c\
 		srcs/unset.c\
 		srcs/utils.c\
 		srcs/len.c\
-		srcs/remove.c
+		srcs/remove.c\
+		srcs/get_token.c \
+		srcs/get_token_utils.c \
+		srcs/error_message.c \
+		srcs/word_expansion.c
 
 OBJS = $(SRCS:.c=.o)
 
