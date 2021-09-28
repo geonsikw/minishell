@@ -6,14 +6,15 @@
 #    By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/19 18:52:09 by gwoo              #+#    #+#              #
-#    Updated: 2021/09/17 20:19:15 by jihkwon          ###   ########.fr        #
+#    Updated: 2021/09/28 20:42:10 by jihkwon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+#CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 RM = rm -f
 
@@ -32,6 +33,7 @@ FILES = ft_memset \
 		ft_strrchr \
 		ft_strnstr \
 		ft_strncmp \
+		ft_strcmp \
 		ft_atoi \
 		ft_isalpha \
 		ft_isdigit \
@@ -39,6 +41,7 @@ FILES = ft_memset \
 		ft_isascii \
 		ft_isprint \
 		ft_isspace \
+		ft_isblank \
 		ft_toupper \
 		ft_tolower \
 		ft_calloc \

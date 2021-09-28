@@ -6,11 +6,32 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:20:46 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/23 17:25:35 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	child_sig_handler(int sig)
+{
+	if (sig == SIGINT)
+	{
+		write(2, "\n", 1);
+		exit(0);
+	}
+}
+
+void	ft_addchr(char **str, char c)
+{
+	char	*aux;
+
+	aux = ft_calloc(sizeof(char), ft_strlen(*str) + 2);
+	ft_memcpy(aux, *str, ft_strlen(*str));
+	aux[ft_strlen(aux)] = c;
+	if (*str)
+		free(*str);
+	*str = aux;
+}
 
 char	*get_env(char **envp, char *env)
 {
@@ -41,6 +62,8 @@ char	**copy_env(char **envp, int add)
 	while (envp[len])
 		len++;
 	cpy = (char **)ft_calloc(sizeof(char *), (len + add + 1));
+	if (!cpy)
+		return (NULL);
 	i = -1;
 	while (++i < len)
 		cpy[i] = ft_strdup(envp[i]);

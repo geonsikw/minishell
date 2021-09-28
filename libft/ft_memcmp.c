@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:12:29 by gwoo              #+#    #+#             */
-/*   Updated: 2021/05/27 15:50:41 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/28 20:38:54 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,15 @@
 
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	size_t			i;
 	unsigned char	*s1_str;
 	unsigned char	*s2_str;
 
+//	if (!s1 || !s2)
+//		return (0);
 	s1_str = (unsigned char *)s1;
 	s2_str = (unsigned char *)s2;
-	i = 0;
-	while (i < n)
-	{
-		if (s1_str[i] != s2_str[i])
-		{
-			return (s1_str[i] - s2_str[i]);
-		}
-		i++;
-	}
+	while (0 < n--)
+		if (*(s1_str++) != *(s2_str++))
+			return (*(--s1_str) - *(--s2_str));
 	return (0);
 }

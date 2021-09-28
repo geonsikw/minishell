@@ -6,36 +6,59 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:29:19 by gwoo              #+#    #+#             */
-/*   Updated: 2021/05/19 20:32:25 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/28 20:36:29 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+static int	ef_check_set(char c, char *set)
+{
+	size_t	set_length;
+	size_t	i;
+
+	set_length = ft_strlen(set);
+	i = 0;
+	while (i <= set_length)
+	{
+		if (c == set[i])
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static int	check_same_set(char const *s1, char *set)
+{
+	int		i;
+
+	i = -1;
+	while (s1[++i])
+		if (ef_check_set(s1[i], set) == 0)
+			return (0);
+	return (1);
+}
+
 char		*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	start;
-	size_t	end;
-	char	*res;
+	int		start;
+	int		end;
+	char	*ptr;
 
-	if (!s1)
+	if (!s1 || !set)
 		return (NULL);
-	if (!set)
-		return (ft_strdup(s1));
+	if (check_same_set(s1, (char *)set) == 1)
+		return (ft_strdup(""));
 	start = 0;
 	end = ft_strlen(s1);
-	while (s1[start] && ft_strchr(set, s1[start]))
+	while (ef_check_set(s1[start], (char *)set))
 		start++;
-	while (s1[end - 1] && ft_strchr(set, s1[end - 1]))
-	{
-		if (end - 1 < 1)
-			break ;
+	while (ef_check_set(s1[end], (char *)set) && end >= 0)
 		end--;
-	}
-	if (start > end)
+	if (end < start)
 		return (ft_strdup(""));
-	if (!(res = (char *)malloc(sizeof(char) * (end - start + 1))))
+	if (!(ptr = (char *)malloc(end - start + 2)))
 		return (NULL);
-	ft_strlcpy(res, s1 + start, end - start + 1);
-	return (res);
+	ft_strlcpy(ptr, s1 + start, end - start + 2);
+	return (ptr);
 }

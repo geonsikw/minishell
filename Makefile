@@ -1,67 +1,64 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/09/17 20:05:58 by jihkwon           #+#    #+#              #
-#    Updated: 2021/09/18 15:12:10 by jihkwon          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
+NAME =	minishell
 
-NAME			= minishell
+SRCS =	srcs/main.c\
+		srcs/parser.c\
+		srcs/pipe.c\
+		srcs/command.c\
+		srcs/args.c\
+		srcs/bin.c\
+		srcs/builtins.c\
+		srcs/cd.c\
+		srcs/export.c\
+		srcs/unset.c\
+		srcs/utils.c\
+		srcs/len.c\
+		srcs/remove.c\
+		srcs/excutable.c\
+		srcs/gnl.c\
+		srcs/get_token.c \
+		srcs/get_token_utils.c \
+		srcs/error_message.c \
+		srcs/word_expansion.c \
+		srcs/signal_handler.c
 
-CC				= gcc
-CFLAGS			= -Wall -Wextra -Werror
-INCS			= .
-RM				= rm -f
-LIBC			= ar rc
+OBJS = $(SRCS:.c=.o)
 
-SRCS_DIR		= srcs
-LIBFT_DIR		= libft
-LIBFT_LIB		= libft.a
+CC = gcc
 
-RL_DIR			= libreadline
-INC_DIR			= include
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address
+#CFLAGS = -Wall -Werror -Wextra
 
-SRC				= main.c \
-				  parser.c \
-				  pipe.c \
-				  command.c \
-				  args.c \
-				  bin.c \
-				  builtins.c \
-				  cd.c \
-				  utils.c \
-				  utils2.c \
-				  signal_handler.c \
+RM = rm -rf
 
-OBJ				= $(SRC:.c=.o)
+LIBFT = libft.a
+LIBFTDIR = libft/
+LIBFTLINK = -L $(LIBFTDIR) -lft
 
-SRCS			= $(addprefix $(SRCS_DIR)/, $(SRC))
-OBJS			= $(addprefix $(SRCS_DIR)/, $(OBJ))
+RL_DIR = libreadline
+INC_DIR = include
 
-all : $(NAME)
+all:		$(NAME)
 
-$(NAME) : $(OBJS)
-	make all -C $(LIBFT_DIR)
+$(NAME):	complib $(OBJS)
 ifdef LINUX
-	$(CC) $(CFLAGS) -o $(NAME) $^ -L $(LIBFT_DIR) -lft -lreadline
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFTLINK) -lreadline
 else
-	$(CC) $(CFLAGS) -o $(NAME) $^ -L $(LIBFT_DIR) -lft -L $(RL_DIR) -lreadline
+	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFTLINK) -L $(RL_DIR) -lreadline
 endif
 
-%.o : %.c
+complib:
+	$(MAKE) -C libft all bonus
+
+%.o:		%.c
 	$(CC) $(CFLAGS) -c -o $@ -I $(INC_DIR) $^
 
-fclean : clean
+clean:
+	$(MAKE) -C $(LIBFTDIR) fclean
+	$(RM) $(OBJS)
+
+fclean: clean
 	$(RM) $(NAME)
 
-clean :
-	$(RM) $(OBJS)
-	make fclean -C $(LIBFT_DIR)
+re:		fclean all
 
-re : fclean all
-
-.PHONY		: all fclean clean re
+.PHONY:		all clean fclean re

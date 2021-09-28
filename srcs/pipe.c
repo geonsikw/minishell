@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:11:16 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/17 19:17:00 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/28 20:24:56 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ void	switch_pipes(int *fds)
 int	check_pipe(int *fds, t_data *p)
 {
 	int		sons;
-	int		*flag;
+	int		flag[2];
 	int		i;
 	int		j;
 
 	sons = 0;
-	flag = (int *)calloc(sizeof(int), 2);
 	flag[0] = 1;
+	flag[1] = 0;
 	j = 0;
 	while (p->av[j])
 	{
@@ -87,26 +87,26 @@ int	check_pipe(int *fds, t_data *p)
 		flag[0] = 0;
 		switch_pipes(fds);
 		if (!p->av[j + i])
-			j += i;
-		else
-			j += i + 1;
+			break ;
+		j += i + 1;
 	}
-	free(flag);
 	return (sons);
 }
 
 void	command_or_pipe(t_data *p)
 {
 	int	fds[4];
+	int	std_out;
 	int	sons;
 	int	i;
 
+	std_out = dup(0);
 	i = 0;
 	while (p->av[i] && ft_memcmp(p->av[i], "|", 2))
 		i++;
 	if (!p->av[i])
 		p->envp = check_command(p->cmds, p);
-	else if (p->cmds[0])
+	else if (p->cmds)
 	{
 		pipe(&fds[0]);
 		pipe(&fds[2]);
@@ -118,4 +118,5 @@ void	command_or_pipe(t_data *p)
 		while (++i < 4)
 			close(fds[i]);
 	}
+	dup2(std_out, 0);
 }
