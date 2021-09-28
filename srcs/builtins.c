@@ -6,40 +6,11 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/28 13:36:39 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/28 14:52:43 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-void	reset(t_data *p)
-{
-	int		i;
-	int		j;
-	int		argc;
-	char	**argv;
-
-	j = 1;
-	argc = (p->ac - 1) * 2 + 1;
-	argv = (char **)ft_calloc(sizeof(char *), (argc + 1));
-	argv[0] = p->av[0];
-	while (p->av[j])
-	{
-		i = 0;
-		while (p->av[j][i] && p->av[j][i] != '=')
-			i++;
-		argv[2 * j - 1] = ft_strldup(p->av[j], i + 1);
-		if (p->av[j][i])
-			argv[2 * j] = ft_strdup(p->av[j] + i + 1);
-		else
-			argv[2 * j] = ft_strdup(p->av[j] + i);
-		j++;
-	}
-	p->ac = argc;
-	p->av = argv;
-}	
-*/
 
 void	reset(t_data *p)
 {
@@ -100,6 +71,7 @@ char	**multiple_env(t_data *p, int fd)
 void	exit_command(t_data *p)
 {
 	int	i;
+	int ret;
 
 	i = 0;
 	if (p->ac > 2)
@@ -111,8 +83,9 @@ void	exit_command(t_data *p)
 			ft_putstrs_fd("exit\nbash: exit: ",
 				p->av[1], ": numeric argument required\n", 2);
 			p->ret = 255;
+			ret = p->ret;
 			free_p(p);
-			exit(p->ret);
+			exit(ret);
 		}
 		else
 			ft_putstrs_fd("exit\n", "bash: exit: too many arguments\n", 0, 2);
@@ -127,12 +100,13 @@ void	exit_command(t_data *p)
 			ft_putstrs_fd("exit\nbash: exit: ",
 				p->av[1], ": numeric argument required\n", 2);
 			p->ret = 255;
+			ret = p->ret;
 			free_p(p);
-			exit(p->ret);
+			exit(ret);
 		}
 		else
 			ft_putstr_fd("exit\n", 2);
-		if (p->ac > 1 && p->ret != 255)
+		if (p->ac > 1)
 			i = ft_atoi(p->av[1]);
 		else
 			i = p->ret;
