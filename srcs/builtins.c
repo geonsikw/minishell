@@ -6,12 +6,13 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/27 13:45:13 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/28 13:36:39 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 void	reset(t_data *p)
 {
 	int		i;
@@ -29,17 +30,44 @@ void	reset(t_data *p)
 		while (p->av[j][i] && p->av[j][i] != '=')
 			i++;
 		argv[2 * j - 1] = ft_strldup(p->av[j], i + 1);
-		argv[2 * j] = ft_strdup(p->av[j] + i + 1);
+		if (p->av[j][i])
+			argv[2 * j] = ft_strdup(p->av[j] + i + 1);
+		else
+			argv[2 * j] = ft_strdup(p->av[j] + i);
 		j++;
 	}
 	p->ac = argc;
-	i = 0;
-	while (i <= argc)
-	{
-		p->av[i] = ft_strdup(argv[i]);
-		i++;
-	}
+	p->av = argv;
 }	
+*/
+
+void	reset(t_data *p)
+{
+	int		i;
+	int		j;
+	int		argc;
+	char	**argv;
+
+	j = 1;
+	argc = p->ac;
+	argv = p->av;
+	p->ac = (argc - 1) * 2 + 1;
+	p->av = (char **)ft_calloc(sizeof(char *), (p->ac + 1));
+	p->av[0] = strdup(argv[0]);
+	while (argv[j])
+	{
+		i = 0;
+		while (argv[j][i] && argv[j][i] != '=')
+			i++;
+		p->av[2 * j - 1] = ft_strldup(argv[j], i + 1);
+		if (argv[j][i])
+			p->av[2 * j] = ft_strdup(argv[j] + i + 1);
+		else
+			p->av[2 * j] = ft_strdup(argv[j] + i);
+		j++;
+	}
+	free_matrix(argv);
+}
 
 char	**multiple_env(t_data *p, int fd)
 {
