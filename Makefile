@@ -34,8 +34,8 @@ LIBFT = libft.a
 LIBFTDIR = libft/
 LIBFTLINK = -L $(LIBFTDIR) -lft
 
-RL_DIR = libreadline
-INC_DIR = include
+RL_DIR = ~/.brew/opt/readline/lib
+INC_DIR = ~/.brew/opt/readline/include
 
 all:		$(NAME)
 
@@ -50,7 +50,11 @@ complib:
 	$(MAKE) -C libft all bonus
 
 %.o:		%.c
+ifdef LINUX
+	$(CC) $(CFLAGS) -c -o $@ $^
+else
 	$(CC) $(CFLAGS) -c -o $@ -I $(INC_DIR) $^
+endif
 
 clean:
 	$(MAKE) -C $(LIBFTDIR) fclean
