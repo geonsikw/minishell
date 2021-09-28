@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 20:02:38 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/21 21:13:58 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/26 21:27:30 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ char	*free_join(char *dest, char *s1, char *s2)
 	}
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
-	dest = (char *)malloc(sizeof(char) * (s1_len + s2_len + 1));
+	dest = (char *)malloc(sizeof(char) * (size_t)(s1_len + s2_len + 1));
 	if (!dest)
 		return (NULL);
-	ft_strlcpy(dest, s1, s1_len + 1);
-	ft_strlcat(dest + (s1_len), s2, s2_len + 1);
+	ft_strlcpy(dest, s1, (size_t)s1_len + 1);
+	ft_strlcat(dest + (s1_len), s2, (size_t)s2_len + 1);
 	return (dest);
 }
 
@@ -110,6 +110,176 @@ int	check_env(char **str, t_data *p)
 	return (0);
 }
 
+char	*read_heredoc(char *delim_token)
+{
+	(void)delim_token;
+	return (0);
+}
+
+/* redirection	: '<'		WORD
+ * 				| '>'		WORD
+ * 				| DLESS		WORD
+ * 				| DGREAT	WORD
+ */
+
+int	parse_redirection(t_list **token_list, char **token, int *type, char **line)
+{
+	int	heredoc;
+
+	if (*type != '<' && *type != '>' && *type != DLESS && *type != DGREAT)
+		return (-ESYNTAX);
+	heredoc = *type == DLESS;
+	ft_lstadd_front(token_list, ft_lstnew(*token));
+	if (get_token(token, type, line) < 0)
+		return (-ETOKEN);
+	if (*type != WORD)
+		return (-ESYNTAX);
+	ft_lstadd_front(token_list, ft_lstnew(*token));
+	if (heredoc)
+		ft_lstadd_front(token_list, ft_lstnew(read_heredoc(*token)));
+	if (get_token(token, type, line) < 0)
+		return (-ETOKEN);
+	return (0);
+}
+
+/* command_element	: WORD
+ * 					| redirection
+ */
+
+int	parse_command_element(
+		t_list **token_list, char **token, int *type, char **line)
+{
+	if (*type != WORD)
+		return (parse_redirection(token_list, token, type, line));
+	ft_lstadd_front(token_list, ft_lstnew(*token));
+	if (get_token(token, type, line) < 0)
+		return (-ETOKEN);
+	return (0);
+}
+
+/* command	: command_element
+ * 			| command_element	command
+ */
+
+int	parse_command(t_list **token_list, char **token, int *type, char **line)
+{
+	int	err;
+
+	err = parse_command_element(token_list, token, type, line);
+	if (err)
+		return (err);
+	if (*type == '|' || *type == EOL)
+		return (0);
+	return (parse_command(token_list, token, type, line));
+}
+
+/* pipeline	: command
+ * 			| command	'|'	pipeline
+ */
+
+int	parse_pipeline(t_list **token_list, char **token, int *type, char **line)
+{
+	int	err;
+
+	err = parse_command(token_list, token, type, line);
+	if (err)
+		return (err);
+	if (*type != '|')
+		return (0);
+	ft_lstadd_front(token_list, ft_lstnew(*token));
+	if (get_token(token, type, line) < 0)
+		return (-ETOKEN);
+	return (parse_pipeline(token_list, token, type, line));
+}
+
+/* line	: empty
+ * 		| pipeline
+ */
+
+int	parse_line(t_list **token_list, char **token, int *type, char **line)
+{
+	char	*token_saved;
+	int		err;
+
+	token_saved = *token;
+	err = parse_pipeline(token_list, token, type, line);
+	if (!err)
+		return (0);
+	if (err == -ESYNTAX && *token == token_saved)
+		return (0);
+	return (err);
+}
+
+int	parse(t_list **token_list, char *line)
+{
+	char	*token;
+	int		type;
+	int		err;
+
+	if (get_token(&token, &type, &line) < 0)
+		err = -ETOKEN;
+	else
+		err = parse_line(token_list, &token, &type, &line);
+	if (!err && type != EOL)
+		err = -ESYNTAX;
+	if (err == -ESYNTAX)
+	{
+		ft_lstclear(token_list, free);
+		errmsg_syntax(token);
+		free(token);
+	}
+	else if (err == -ETOKEN)
+	{
+		ft_lstclear(token_list, free);
+		ft_putendl_fd("minishell: quote not closed", 2);
+	}
+	else
+		free(token);
+	return (err);
+}
+
+static char	**get_array_from_list(t_list **token_list, int size)
+{
+	char	**arr;
+	t_list	*tmp;
+
+	arr = malloc(sizeof(char *) * ((size_t)size + 1));
+	arr[size] = 0;
+	while (--size >= 0)
+	{
+		arr[size] = (char *)(*token_list)->content;
+		tmp = *token_list;
+		*token_list = (*token_list)->next;
+		free(tmp);
+	}
+	return (arr);
+}
+
+void	parser(t_data *p)
+{
+	t_list	*token_list;
+
+	if (!p->str)
+		p->cmds = NULL;
+	else
+		p->cmds = ft_strldup(p->str, ft_strlen(p->str));
+	token_list = 0;
+	if (parse(&token_list, p->cmds) == 0)
+	{
+		p->ac = ft_lstsize(token_list);
+		p->av = get_array_from_list(&token_list, p->ac);
+		//for (int i = 0; p->av[i]; i++) printf("%s\n", p->av[i]);
+		command_or_pipe(p);
+		free_matrix(p->av);
+	}
+	else
+		p->ret = 2;
+	free(p->str);
+	p->str = 0;
+	free(p->cmds);
+}
+
+/*
 void	parser(t_data *p)
 {
 	if (!p->str)
@@ -126,3 +296,4 @@ void	parser(t_data *p)
 	p->str = 0;
 	free(p->cmds);
 }
+*/

@@ -13,8 +13,15 @@ SRCS =	srcs/main.c\
 		srcs/utils.c\
 		srcs/len.c\
 		srcs/remove.c\
+<<<<<<< HEAD
 		srcs/excutable.c\
 		srcs/gnl.c\
+=======
+		srcs/get_token.c \
+		srcs/get_token_utils.c \
+		srcs/error_message.c \
+		srcs/word_expansion.c
+>>>>>>> jihkwon1
 
 OBJS = $(SRCS:.c=.o)
 
@@ -36,7 +43,7 @@ $(NAME):	complib $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(OBJS) $(LIBFTLINK)
 
 complib:
-	$(MAKE) -C libft/
+	$(MAKE) -C libft all bonus
 
 %.o:		%.c
 	$(CC) -c $(CFLAGS) -o $@ $<
@@ -53,4 +60,3 @@ fclean: clean
 re:		fclean all
 
 .PHONY:		all clean fclean re
-.SILENT:
