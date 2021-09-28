@@ -6,11 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2021/09/24 00:57:36 by gwoo             ###   ########.fr       */
-=======
-/*   Updated: 2021/09/26 19:49:13 by jihkwon          ###   ########.fr       */
->>>>>>> jihkwon1
+/*   Updated: 2021/09/28 18:47:10 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +64,10 @@ void				ft_putstrlen_fd(char *s, int len, int fd);
 char				*copy_str(char *s);
 void				free_p(t_data *p);
 void				free_var(char *a, char *b, char *c, char *d);
-<<<<<<< HEAD
 void				skip_spaces(char **str);
 void				excutable(t_data *param);
 int					gnl(int fd, char **line);
 void				child_sig_handler(int sig);
-=======
 
 enum e_token_type
 {
@@ -95,5 +89,4 @@ int	iswordchar(char c);
 int	get_token(char **token, int *type, char **line);
 void	errmsg_syntax(char *token);
 void	expand_args(t_data *p);
->>>>>>> jihkwon1
 #endif
