@@ -6,24 +6,26 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:31:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/27 23:27:49 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/30 14:56:55 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 int	redirect(t_data *p, int i, int fd)
 {
 	int		ret;
 	char	c;
+	char	*filename;
 
 	while (p->av[i])
 	{
 		if (!ft_memcmp(p->av[i], ">", 2))
-			fd = open(p->av[i + 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+			fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
 		else if (!ft_memcmp(p->av[i], ">>", 3))
 		{
-			fd = open(p->av[i + 1], O_RDWR | O_CREAT | O_APPEND, 0666);
+			fd = open(filename, O_RDWR | O_CREAT | O_APPEND, 0666);
 			ret = 0;
 			while ((ret = read(fd, &c, 1)))
 			{
@@ -55,6 +57,50 @@ int	set_fd(t_data *p)
 	if (!p->av[i])
 		return (1);
 	return (redirect(p, i, fd));
+}
+*/
+
+int	redirect_out(char *op, char *word, t_data *p)
+{
+	int		fd;
+	char	*filename;
+
+	filename = expand_redir_filename(word, p->envp, p->ret);
+	if (!filename)
+		return (-1);
+	if (ft_strcmp(op, ">") == 0)
+		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	else
+		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0666);
+	if (fd < 0)
+	{
+		ft_putstrs_fd("minishell: ", filename, ": ", 2);
+		perror(0);
+	}
+	free(filename);
+	return (fd);
+}
+
+int	set_fd_out(t_data *p)
+{
+	int	i;
+	int	fd;
+
+	i = 0;
+	fd = 1;
+	while (p->av[i])
+		if (ft_strcmp(p->av[i], ">") == 0 || ft_strcmp(p->av[i], ">>") == 0)
+		{
+			if (fd != 1)
+				close(fd);
+			fd = redirect_out(p->av[i], p->av[i + 1], p);
+			if (fd < 0)
+				break ;
+			i += 2;
+		}
+		else
+			i += 1;
+	return (fd);
 }
 
 int	count_redir(t_data *p)
@@ -103,11 +149,11 @@ char	**check_command(char *str, t_data *p)
 	(void)str;
 	if (p->av[0] && *(p->av[0]))
 	{
-		fd = set_fd(p);
+		fd = set_fd_out(p);
+		if (fd < 0)
+			return (p->envp);
 		copy_args1(p);
-		expand_args(p);
-		p->ret = check_builtins(fd, p);
-		if (p->ret == 127 && check_bin(fd, p) == 127)
+		if (check_builtins(fd, p) < 0 && check_bin(fd, p) == 127)
 		{
 			ft_putstrs_fd("minishell: ", p->av[0], ": command not found.\n", 2);
 			p->ret = 127;

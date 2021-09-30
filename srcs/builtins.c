@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/28 14:52:43 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/29 20:32:12 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,10 +168,24 @@ void	echo_command(t_data *p, int fd)
 		write(fd, "\n", 1);
 }
 
+int	count_string_array(char **arr)
+{
+	int	cnt;
+
+	cnt = 0;
+	while (*arr++)
+		cnt++;
+	return (cnt);
+}
+
 int	check_builtins(int fd, t_data *p)
 {
 	char	cwd[4097];
+	t_data	save;
 
+	save = *p;
+	p->av = expand_args(copy_args(p), p->envp, p->ret);
+	p->ac = count_string_array(p->av);
 	p->ret = 0;
 	if (!ft_memcmp(p->av[0], "echo", 5))
 		echo_command(p, fd);
@@ -186,11 +200,18 @@ int	check_builtins(int fd, t_data *p)
 		p->envp = multiple_env(p, fd);
 	else if (!ft_memcmp(p->av[0], "exit", 5))
 		exit_command(p);
+	/*
 	else if (!ft_memcmp(p->av[0], "./", 2)
 		|| !ft_memcmp(p->av[0], "../", 3)
 		|| !ft_memcmp(p->av[0], "/", 1))
 		excutable(p);
+	*/
 	else
-		return (127);
-	return (p->ret);
+	{
+		free_matrix(p->av);
+		*p = save;
+		return (-1);
+	}
+	free_matrix(save.av);
+	return (0);
 }

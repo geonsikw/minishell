@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/28 20:30:53 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/30 15:12:54 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,5 +92,7 @@ int	isquotechar(char c);
 int	iswordchar(char c);
 int	get_token(char **token, int *type, char **line);
 void	errmsg_syntax(char *token);
-void	expand_args(t_data *p);
+char	**expand_args(char **args, char *envp[], int exitcode);
+char	*expand_redir_filename(char *word, char *envp[], int exitcode);
+int	set_fd_in(t_data *p);
 #endif

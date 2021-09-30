@@ -43,23 +43,23 @@ char	*expand_param(char **word, char *envp[], int exitcode)
 	char	*name;
 
 	++*word;
-	name = getname(word);
-	if (ft_strcmp(name, "") == 0)
+	if (ft_isalnum(**word))
 	{
+		name = getname(word);
+		value = get_env(envp, name);
+		if (!value)
+			value = "";
 		free(name);
-		if (**word == '?')
-		{
-			++*word;
-			return (ft_itoa(exitcode));
-		}
-		if (isquotechar(**word))
-			return (ft_strdup(""));
-		return (ft_strdup("$"));
+		return (ft_strdup(value));
 	}
-	value = get_env(envp, name);
-	if (!value)
-		value = "";
-	return (ft_strdup(value));
+	if (isquotechar(**word))
+		return (ft_strdup(""));
+	if (**word == '?')
+	{
+		++*word;
+		return (ft_itoa(exitcode));
+	}
+	return (ft_strdup("$"));
 }
 
 char	*expand_quote(char **word, char *envp[], int exitcode)
@@ -224,7 +224,38 @@ t_list	*ft_lstjoin(t_list *lst1, t_list *lst2)
 	return (lst1);
 }
 
-void	expand_args(t_data *p)
+char	**expand_args(char **args, char *envp[], int exitcode)
+{
+	t_list	*arglist;
+	int		i;
+
+	arglist = 0;
+	i = -1;
+	while (args[++i])
+		arglist = ft_lstjoin(
+				expand_word(args[i], envp, exitcode),
+				arglist);
+	free_matrix(args);
+	return (get_array_from_list(&arglist, ft_lstsize(arglist)));
+}
+
+char	*expand_redir_filename(char *word, char *envp[], int exitcode)
+{
+	t_list	*list;
+	char	*res;
+
+	res = 0;
+	list = expand_word(word, envp, exitcode);
+	if (ft_lstsize(list) == 1)
+		res = ft_strdup(((struct s_field *)list->content)->str);
+	else
+		ft_putstrs_fd("minishell: ", word, ": ambiguous redirect\n", 2);
+	ft_lstclear(&list, free_field);
+	return (res);
+}
+
+/*
+void	expand_av(t_data *p)
 {
 	t_list	*arglist;
 	int		i;
@@ -239,3 +270,4 @@ void	expand_args(t_data *p)
 	p->ac = ft_lstsize(arglist);
 	p->av = get_array_from_list(&arglist, p->ac);
 }
+*/
