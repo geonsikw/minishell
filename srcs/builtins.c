@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/29 20:32:12 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/30 17:28:43 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,11 +181,7 @@ int	count_string_array(char **arr)
 int	check_builtins(int fd, t_data *p)
 {
 	char	cwd[4097];
-	t_data	save;
 
-	save = *p;
-	p->av = expand_args(copy_args(p), p->envp, p->ret);
-	p->ac = count_string_array(p->av);
 	p->ret = 0;
 	if (!ft_memcmp(p->av[0], "echo", 5))
 		echo_command(p, fd);
@@ -207,11 +203,6 @@ int	check_builtins(int fd, t_data *p)
 		excutable(p);
 	*/
 	else
-	{
-		free_matrix(p->av);
-		*p = save;
 		return (-1);
-	}
-	free_matrix(save.av);
 	return (0);
 }

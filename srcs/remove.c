@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/21 20:18:17 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/24 00:44:20 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/09/30 22:30:16 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	free_p(t_data *p)
 	free_matrix(p->export);
 	free_matrix(p->av);
 	free(p->cmds);
-	free(p);
 }
 
 void	free_matrix(char **matrix)

@@ -19,7 +19,8 @@ SRCS =	srcs/main.c\
 		srcs/get_token_utils.c \
 		srcs/error_message.c \
 		srcs/word_expansion.c \
-		srcs/signal_handler.c
+		srcs/signal_handler.c \
+		srcs/redirection.c
 
 OBJS = $(SRCS:.c=.o)
 

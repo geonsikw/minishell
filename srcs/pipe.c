@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:11:16 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/28 20:24:56 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/30 16:59:52 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ void	command_or_pipe(t_data *p)
 	int	sons;
 	int	i;
 
+	if (!p->av[0])
+		return ;
 	std_out = dup(0);
 	i = 0;
 	while (p->av[i] && ft_memcmp(p->av[i], "|", 2))

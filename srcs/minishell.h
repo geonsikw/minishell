@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/30 15:12:54 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/01 00:12:29 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 typedef struct s_data{
 	int		ac;
@@ -52,7 +54,7 @@ char				**unset_command(t_data *p, int i);
 char				**copy_args(t_data *p);
 char				**check_command(char *str, t_data *p);
 int					check_builtins(int fd, t_data *p);
-int					check_bin(int fd, t_data *p);
+int					check_bin(int fdin, int fdout, t_data *p);
 int					count_args(char *str);
 int					ft_strlen_env(char *str);
 int					ft_strlen_char(char *str, char c);
@@ -92,7 +94,11 @@ int	isquotechar(char c);
 int	iswordchar(char c);
 int	get_token(char **token, int *type, char **line);
 void	errmsg_syntax(char *token);
-char	**expand_args(char **args, char *envp[], int exitcode);
+void	expand_args(t_data *p);
 char	*expand_redir_filename(char *word, char *envp[], int exitcode);
+char	*remove_quotes(char *word);
 int	set_fd_in(t_data *p);
+int	set_fd_out(t_data *p);
+char	*strjoin_replace(char *s1, char *s2);
+char	*ft_strtok(char **str, char *delim);
 #endif

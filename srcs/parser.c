@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 20:02:38 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/28 20:28:06 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/01 10:19:57 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,28 @@ int	check_env(char **str, t_data *p)
 
 char	*read_heredoc(char *delim_token)
 {
-	(void)delim_token;
-	return (0);
+	char	*heredoc;
+	char	*delim;
+	char	*line;
+
+	signal(SIGINT, nop);
+	heredoc = ft_strdup("");
+	delim = remove_quotes(delim_token);
+	while (1)
+	{
+		line = readline("> ");
+		if (!line)
+			ft_putstrs_fd("minishell: warning: here-document delimited "
+					"by end-of-file (wanted `", delim, "')\n", 2);
+		if (!line || ft_strcmp(line, delim) == 0)
+			break ;
+		heredoc = strjoin_replace(heredoc, ft_strjoin(line, "\n"));
+		free(line);
+	}
+	free(line);
+	free(delim);
+	signal(SIGINT, print_nl);
+	return (heredoc);
 }
 
 /* redirection	: '<'		WORD
@@ -134,9 +154,13 @@ int	parse_redirection(t_list **token_list, char **token, int *type, char **line)
 		return (-ETOKEN);
 	if (*type != WORD)
 		return (-ESYNTAX);
-	ft_lstadd_front(token_list, ft_lstnew(*token));
 	if (heredoc)
+	{
 		ft_lstadd_front(token_list, ft_lstnew(read_heredoc(*token)));
+		free(*token);
+	}
+	else
+		ft_lstadd_front(token_list, ft_lstnew(*token));
 	if (get_token(token, type, line) < 0)
 		return (-ETOKEN);
 	return (0);

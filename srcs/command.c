@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:31:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/30 14:56:55 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/30 22:15:22 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,49 +60,6 @@ int	set_fd(t_data *p)
 }
 */
 
-int	redirect_out(char *op, char *word, t_data *p)
-{
-	int		fd;
-	char	*filename;
-
-	filename = expand_redir_filename(word, p->envp, p->ret);
-	if (!filename)
-		return (-1);
-	if (ft_strcmp(op, ">") == 0)
-		fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	else
-		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0666);
-	if (fd < 0)
-	{
-		ft_putstrs_fd("minishell: ", filename, ": ", 2);
-		perror(0);
-	}
-	free(filename);
-	return (fd);
-}
-
-int	set_fd_out(t_data *p)
-{
-	int	i;
-	int	fd;
-
-	i = 0;
-	fd = 1;
-	while (p->av[i])
-		if (ft_strcmp(p->av[i], ">") == 0 || ft_strcmp(p->av[i], ">>") == 0)
-		{
-			if (fd != 1)
-				close(fd);
-			fd = redirect_out(p->av[i], p->av[i + 1], p);
-			if (fd < 0)
-				break ;
-			i += 2;
-		}
-		else
-			i += 1;
-	return (fd);
-}
-
 int	count_redir(t_data *p)
 {
 	int	count;
@@ -111,13 +68,14 @@ int	count_redir(t_data *p)
 	i = -1;
 	count = 0;
 	while (++i < p->ac)
-	{
-		if (!ft_memcmp(p->av[i], ">", 2) || !ft_memcmp(p->av[i], ">>", 3))
+		if (!ft_memcmp(p->av[i], ">", 2)
+				|| !ft_memcmp(p->av[i], ">>", 3)
+				|| !ft_memcmp(p->av[i], "<", 2)
+				|| !ft_memcmp(p->av[i], "<<", 3))
 		{
 			count++;
 			i++;
 		}
-	}
 	return (count);
 }
 
@@ -133,7 +91,10 @@ void	copy_args1(t_data *p)
 	j = 0;
 	while (j < p->ac)
 	{
-		if (!ft_memcmp(p->av[i], ">", 2) || !ft_memcmp(p->av[i], ">>", 3))
+		if (!ft_memcmp(p->av[i], ">", 2)
+				|| !ft_memcmp(p->av[i], ">>", 3)
+				|| !ft_memcmp(p->av[i], "<", 2)
+				|| !ft_memcmp(p->av[i], "<<", 3))
 			i += 2;
 		else
 			args[j++] = ft_strdup(p->av[i++]);
@@ -142,6 +103,7 @@ void	copy_args1(t_data *p)
 	p->av = args;
 }
 
+/*
 char	**check_command(char *str, t_data *p)
 {
 	int		fd;
@@ -161,5 +123,32 @@ char	**check_command(char *str, t_data *p)
 		if (fd != 1)
 			close(fd);
 	}
+	return (p->envp);
+}
+*/
+
+char	**check_command(char *str, t_data *p)
+{
+	int	fdin;
+	int	fdout;
+
+	(void)str;
+	if (!p->av[0] || !*(p->av[0]))
+		return (p->envp);
+	fdin = set_fd_in(p);
+	fdout = set_fd_out(p);
+	if (fdin < 0 || fdout < 0)
+		return (p->envp);
+	copy_args1(p);
+	expand_args(p);
+	if (check_builtins(fdout, p) < 0 && check_bin(fdin, fdout, p) == 127)
+	{
+		ft_putstrs_fd("minishell: ", p->av[0], ": command not found.\n", 2);
+		p->ret = 127;
+	}
+	if (fdin != 0)
+		close (fdin);
+	if (fdout != 1)
+		close (fdout);
 	return (p->envp);
 }

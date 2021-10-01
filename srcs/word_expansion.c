@@ -1,28 +1,5 @@
 #include "minishell.h"
 
-char	*strjoin_replace(char *s1, char *s2)
-{
-	char	*join;
-
-	join = ft_strjoin(s1, s2);
-	free(s1);
-	free(s2);
-	return (join);
-}
-
-char	*ft_strtok(char **str, char *delim)
-{
-	int		i;
-	char	*res;
-
-	i = 0;
-	while (!ft_strchr(delim, (*str)[i]))
-		i++;
-	res = ft_strldup(*str, i);
-	*str += i;
-	return (res);
-}
-
 char	*getname(char **word)
 {
 	int		i;
@@ -224,6 +201,7 @@ t_list	*ft_lstjoin(t_list *lst1, t_list *lst2)
 	return (lst1);
 }
 
+/*
 char	**expand_args(char **args, char *envp[], int exitcode)
 {
 	t_list	*arglist;
@@ -238,6 +216,7 @@ char	**expand_args(char **args, char *envp[], int exitcode)
 	free_matrix(args);
 	return (get_array_from_list(&arglist, ft_lstsize(arglist)));
 }
+*/
 
 char	*expand_redir_filename(char *word, char *envp[], int exitcode)
 {
@@ -254,8 +233,28 @@ char	*expand_redir_filename(char *word, char *envp[], int exitcode)
 	return (res);
 }
 
-/*
-void	expand_av(t_data *p)
+char	*remove_quotes(char *word)
+{
+	char	*res;
+
+	res = ft_strdup("");
+	while (*word)
+		if (*word == '\'')
+		{
+			word++;
+			res = strjoin_replace(res, ft_strtok(&word, "'"));
+		}
+		else if (*word == '"')
+		{
+			word++;
+			res = strjoin_replace(res, ft_strtok(&word, "\""));
+		}
+		else
+			res = strjoin_replace(res, ft_strtok(&word, "'\""));
+	return (res);
+}
+
+void	expand_args(t_data *p)
 {
 	t_list	*arglist;
 	int		i;
@@ -270,4 +269,3 @@ void	expand_av(t_data *p)
 	p->ac = ft_lstsize(arglist);
 	p->av = get_array_from_list(&arglist, p->ac);
 }
-*/

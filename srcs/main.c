@@ -6,13 +6,10 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:27:12 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/29 14:13:02 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/09/30 22:53:14 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <readline/readline.h>
-#include <readline/history.h>
 #include <termios.h>
 #include "minishell.h"
 
