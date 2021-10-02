@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/02 23:22:25 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/02 23:22:26 by jihkwon          ###   ########.fr       */
+/*   Created: 2021/10/02 23:15:34 by jihkwon           #+#    #+#             */
+/*   Updated: 2021/10/02 23:15:36 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_new_prompt(int sig)
+void	env_command(t_data *p, int fd)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
+	int	i;
 
-void	sig_print_nl(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-}
-
-void	sig_nop(int sig)
-{
-	(void)sig;
+	p->ret = 0;
+	if (p->ac != 1)
+	{
+		ft_putstr_fd("bash: env: too many arguments\n", 2);
+		p->ret = 1;
+		return ;
+	}
+	i = 0;
+	while (p->envp[i])
+		ft_putstrs_fd(p->envp[i++], "\n", 0, fd);
 }

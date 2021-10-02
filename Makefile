@@ -1,32 +1,50 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2021/10/02 23:26:31 by jihkwon           #+#    #+#              #
+#    Updated: 2021/10/02 23:26:37 by jihkwon          ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME =	minishell
 
-SRCS =	srcs/main.c\
-		srcs/parser.c\
-		srcs/pipe.c\
-		srcs/command.c\
-		srcs/args.c\
-		srcs/bin.c\
-		srcs/builtins.c\
-		srcs/cd.c\
-		srcs/export.c\
-		srcs/unset.c\
-		srcs/utils.c\
-		srcs/len.c\
-		srcs/remove.c\
-		srcs/excutable.c\
-		srcs/gnl.c\
-		srcs/get_token.c \
-		srcs/get_token_utils.c \
+SRCS =	srcs/bin.c \
+		srcs/cd.c \
+		srcs/command.c \
+		srcs/echo.c \
+		srcs/env.c \
+		srcs/environment.c \
 		srcs/error_message.c \
-		srcs/word_expansion.c \
+		srcs/exit.c \
+		srcs/export1.c \
+		srcs/export2.c \
+		srcs/field.c \
+		srcs/get_token.c \
+		srcs/here_document.c \
+		srcs/len.c \
+		srcs/main.c \
+		srcs/parser1.c \
+		srcs/parser2.c \
+		srcs/pipe.c \
+		srcs/redirection.c \
+		srcs/remove.c \
 		srcs/signal_handler.c \
-		srcs/redirection.c
+		srcs/unset.c \
+		srcs/utils1.c \
+		srcs/utils2.c \
+		srcs/word_expansion1.c \
+		srcs/word_expansion2.c \
+		srcs/word_expansion3.c \
 
 OBJS = $(SRCS:.c=.o)
 
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address -Wunused-function
+CFLAGS = -Wall -Werror -Wextra -fsanitize=address
 #CFLAGS = -Wall -Werror -Wextra
 
 RM = rm -rf

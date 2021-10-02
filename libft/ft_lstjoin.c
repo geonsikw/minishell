@@ -1,33 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   ft_lstjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/02 23:22:25 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/02 23:22:26 by jihkwon          ###   ########.fr       */
+/*   Created: 2021/10/02 22:22:13 by jihkwon           #+#    #+#             */
+/*   Updated: 2021/10/02 22:22:19 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	sig_new_prompt(int sig)
+t_list	*ft_lstjoin(t_list *lst1, t_list *lst2)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
+	t_list	**end;
 
-void	sig_print_nl(int sig)
-{
-	(void)sig;
-	write(1, "\n", 1);
-}
-
-void	sig_nop(int sig)
-{
-	(void)sig;
+	end = &lst1;
+	while (*end)
+		end = &(*end)->next;
+	*end = lst2;
+	return (lst1);
 }

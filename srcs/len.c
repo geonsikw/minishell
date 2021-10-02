@@ -6,11 +6,27 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 22:38:11 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/27 15:20:03 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/02 21:58:43 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+/*
+int	ft_strlen_env(char *str)
+{
+	int	len;
+
+	len = 0;
+	while (*str
+		&& (ft_isalnum(*str) || *str == '{' || *str == '?' || *str == '_'))
+	{
+		len++;
+		str++;
+	}
+	return (len);
+}
+*/
 
 void	ft_putstrlen_fd(char *s, int len, int fd)
 {
@@ -34,18 +50,4 @@ int	ft_strlen_char(char *str, char c)
 	while (str[i] && str[i] != c)
 		i++;
 	return (i);
-}
-
-int	ft_strlen_env(char *str)
-{
-	int	len;
-
-	len = 0;
-	while (*str
-		&& (ft_isalnum(*str) || *str == '{' || *str == '?' || *str == '_'))
-	{
-		len++;
-		str++;
-	}
-	return (len);
 }

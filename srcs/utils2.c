@@ -6,12 +6,13 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/01 00:10:22 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/02 22:37:34 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 void	child_sig_handler(int sig)
 {
 	if (sig == SIGINT)
@@ -32,43 +33,7 @@ void	ft_addchr(char **str, char c)
 		free(*str);
 	*str = aux;
 }
-
-char	*get_env(char **envp, char *env)
-{
-	int		i;
-	int		len;
-	char	*tmp;
-
-	env = ft_strjoin(env, "=");
-	len = strlen(env);
-	i = 0;
-	while (envp[i] && ft_memcmp(env, envp[i], len))
-		i++;
-	if (envp[i])
-		tmp = envp[i] + len;
-	else
-		tmp = 0;
-	free(env);
-	return (tmp);
-}
-
-char	**copy_env(char **envp, int add)
-{
-	int		len;
-	int		i;
-	char	**cpy;
-
-	len = 0;
-	while (envp[len])
-		len++;
-	cpy = (char **)ft_calloc(sizeof(char *), (len + add + 1));
-	if (!cpy)
-		return (NULL);
-	i = -1;
-	while (++i < len)
-		cpy[i] = ft_strdup(envp[i]);
-	return (cpy);
-}
+*/
 
 int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
 {
@@ -79,6 +44,27 @@ int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
 	if (after)
 		write(fd, after, ft_strlen(after));
 	return (1);
+}
+
+int	digits_only(char *str)
+{
+	while (ft_isdigit(*str))
+		str++;
+	return (!*str);
+}
+
+char	*getname(char **word)
+{
+	int		i;
+	char	*name;
+
+	i = 0;
+	if (ft_isalpha((*word)[i]))
+		while (ft_isalnum((*word)[++i]) || (*word)[i] == '_')
+			;
+	name = ft_strldup((*word), i);
+	*word += i;
+	return (name);
 }
 
 char	*strjoin_replace(char *s1, char *s2)

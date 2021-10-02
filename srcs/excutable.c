@@ -6,10 +6,11 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 21:06:44 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/29 16:52:01 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/02 22:59:20 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "minishell.h"
 
 int	check_errno(t_data *p, char *str)
@@ -124,3 +125,4 @@ void	excutable(t_data *p)
 	free(path);
 	p->av[0] = start;
 }
+*/

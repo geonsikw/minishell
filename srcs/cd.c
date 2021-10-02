@@ -6,35 +6,11 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 17:06:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/24 00:54:57 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/02 17:34:55 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	**export_command(t_data *p, int j)
-{
-	int		i;
-	char	**cpy;
-
-	i = 0;
-	while (p->envp[i] && ft_memcmp(p->envp[i],
-			p->av[j], ft_strlen(p->av[j])))
-		i++;
-	if (!p->envp[i])
-	{
-		cpy = copy_env(p->envp, 1);
-		cpy[i] = ft_strjoin(p->av[j], p->av[j + 1]);
-		free_matrix(p->envp);
-	}
-	else
-	{
-		cpy = p->envp;
-		free(p->envp[i]);
-		p->envp[i] = ft_strjoin(p->av[j], p->av[j + 1]);
-	}
-	return (cpy);
-}
 
 void	change_dir(char *path, t_data *p)
 {
@@ -50,13 +26,13 @@ void	change_dir(char *path, t_data *p)
 		p->av[0] = ft_strdup("export");
 		p->av[1] = ft_strdup("OLDPWD=");
 		p->av[2] = ft_strdup(oldpwd);
-		p->envp = export_command(p, 1);
+		p->envp = update_envp(p, 1);
 		free_matrix(p->av);
 		p->av = (char **)ft_calloc(sizeof(char *), 4);
 		p->av[0] = ft_strdup("export");
 		p->av[1] = ft_strdup("PWD=");
 		p->av[2] = ft_strdup(getcwd(cwd, 4096));
-		p->envp = export_command(p, 1);
+		p->envp = update_envp(p, 1);
 	}
 	else
 		ft_putstrs_fd("bash: cd: ", p->av[1], ": ", 2);
@@ -66,6 +42,7 @@ void	cd_command(t_data *p)
 {
 	char	*path;
 
+	p->ret = 0;
 	errno = 0;
 	if (p->ac <= 2)
 	{

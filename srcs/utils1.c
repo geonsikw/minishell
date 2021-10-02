@@ -1,33 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/02 23:22:25 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/02 23:22:26 by jihkwon          ###   ########.fr       */
+/*   Created: 2021/10/02 23:22:49 by jihkwon           #+#    #+#             */
+/*   Updated: 2021/10/02 23:22:50 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_new_prompt(int sig)
+int	isopchar(char c)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	return (c == '<' || c == '>' || c == '|');
 }
 
-void	sig_print_nl(int sig)
+int	isquotechar(char c)
 {
-	(void)sig;
-	write(1, "\n", 1);
+	return (c == '"' || c == '\'');
 }
 
-void	sig_nop(int sig)
+int	iswordchar(char c)
 {
-	(void)sig;
+	return (c && !ft_isblank(c) && !isopchar(c));
 }

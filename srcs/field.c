@@ -1,33 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal_handler.c                                   :+:      :+:    :+:   */
+/*   field.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/02 23:22:25 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/02 23:22:26 by jihkwon          ###   ########.fr       */
+/*   Created: 2021/10/02 23:18:18 by jihkwon           #+#    #+#             */
+/*   Updated: 2021/10/02 23:18:30 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	sig_new_prompt(int sig)
+struct s_field	*new_field(int wasq, char *str)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	struct s_field	*new;
+
+	new = malloc(sizeof(struct s_field));
+	new->wasq = wasq;
+	new->str = str;
+	return (new);
 }
 
-void	sig_print_nl(int sig)
+struct s_field	*merge_field(struct s_field *f1, struct s_field *f2)
 {
-	(void)sig;
-	write(1, "\n", 1);
+	struct s_field	*new;
+
+	new = new_field(f1->wasq | f2->wasq, ft_strjoin(f1->str, f2->str));
+	free_field(f1);
+	free_field(f2);
+	return (new);
 }
 
-void	sig_nop(int sig)
+void	free_field(void *f)
 {
-	(void)sig;
+	free(((struct s_field *)f)->str);
+	free(f);
 }

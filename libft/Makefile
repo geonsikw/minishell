@@ -6,7 +6,7 @@
 #    By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/19 18:52:09 by gwoo              #+#    #+#              #
-#    Updated: 2021/09/28 20:42:10 by jihkwon          ###   ########.fr        #
+#    Updated: 2021/10/02 22:51:35 by jihkwon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,8 @@ FILES_B = 	ft_lstnew \
 	  		ft_lstdelone \
 	  		ft_lstclear \
 	  		ft_lstiter \
-	  		ft_lstmap
+	  		ft_lstmap \
+			ft_lstjoin
 
 SRCS_DIR = ./
 SRCS = $(addprefix $(SRCS_DIR), $(addsuffix .c, $(FILES)))

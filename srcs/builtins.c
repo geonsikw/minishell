@@ -6,40 +6,13 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 12:32:40 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/30 17:28:43 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/02 21:24:32 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	reset(t_data *p)
-{
-	int		i;
-	int		j;
-	int		argc;
-	char	**argv;
-
-	j = 1;
-	argc = p->ac;
-	argv = p->av;
-	p->ac = (argc - 1) * 2 + 1;
-	p->av = (char **)ft_calloc(sizeof(char *), (p->ac + 1));
-	p->av[0] = strdup(argv[0]);
-	while (argv[j])
-	{
-		i = 0;
-		while (argv[j][i] && argv[j][i] != '=')
-			i++;
-		p->av[2 * j - 1] = ft_strldup(argv[j], i + 1);
-		if (argv[j][i])
-			p->av[2 * j] = ft_strdup(argv[j] + i + 1);
-		else
-			p->av[2 * j] = ft_strdup(argv[j] + i);
-		j++;
-	}
-	free_matrix(argv);
-}
-
+/*
 char	**multiple_env(t_data *p, int fd)
 {
 	int	i;
@@ -67,7 +40,9 @@ char	**multiple_env(t_data *p, int fd)
 	}
 	return (p->envp);
 }
+*/
 
+/*
 void	exit_command(t_data *p)
 {
 	int	i;
@@ -114,95 +89,4 @@ void	exit_command(t_data *p)
 		exit(i);
 	}
 }
-
-void	env_command(t_data *p, int fd)
-{
-	int	i;
-
-	i = 0;
-	if (p->ac != 1)
-	{
-		ft_putstr_fd("bash: env: too many arguments\n", 2);
-		p->ret = 1;
-		return ;
-	}
-	while (p->envp[i])
-		ft_putstrs_fd(p->envp[i++], "\n", 0, fd);
-}
-
-int	n_check(t_data *p, int i)
-{
-	char	*d;
-
-	d = p->av[1 + i] + 2;
-	if (!ft_memcmp(p->av[1 + i], "-n", 2))
-	{
-		while (*d == 'n')
-		{
-			d++;
-			if (!*d)
-				return (1);
-		}
-	}
-	return (0);
-}
-
-void	echo_command(t_data *p, int fd)
-{
-	int	i;
-
-	i = 0;
-	while (p->ac > 1 && (n_check(p, i) || !ft_memcmp(p->av[1 + i], "-n", 3)))
-	{
-		i++;
-		if (!p->av[1 + i])
-			break ;
-	}
-	while (++i < p->ac)
-	{
-		ft_putstr_fd(p->av[i], fd);
-		if (i < p->ac - 1 && ft_strlen(p->av[i + 1]))
-			write(fd, " ", 1);
-	}
-	if (!(p->ac > 1 && (!ft_memcmp(p->av[1], "-n", 3) || n_check(p, 0))))
-		write(fd, "\n", 1);
-}
-
-int	count_string_array(char **arr)
-{
-	int	cnt;
-
-	cnt = 0;
-	while (*arr++)
-		cnt++;
-	return (cnt);
-}
-
-int	check_builtins(int fd, t_data *p)
-{
-	char	cwd[4097];
-
-	p->ret = 0;
-	if (!ft_memcmp(p->av[0], "echo", 5))
-		echo_command(p, fd);
-	else if (!ft_memcmp(p->av[0], "pwd", 4))
-		ft_putstrs_fd(getcwd(cwd, 4096), "\n", 0, fd);
-	else if (!ft_memcmp(p->av[0], "cd", 3))
-		cd_command(p);
-	else if (!ft_memcmp(p->av[0], "env", 4))
-		env_command(p, fd);
-	else if (!ft_memcmp(p->av[0], "export", 7)
-		|| !ft_memcmp(p->av[0], "unset", 6))
-		p->envp = multiple_env(p, fd);
-	else if (!ft_memcmp(p->av[0], "exit", 5))
-		exit_command(p);
-	/*
-	else if (!ft_memcmp(p->av[0], "./", 2)
-		|| !ft_memcmp(p->av[0], "../", 3)
-		|| !ft_memcmp(p->av[0], "/", 1))
-		excutable(p);
-	*/
-	else
-		return (-1);
-	return (0);
-}
+*/

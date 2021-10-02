@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:24:41 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/22 16:52:00 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/02 17:33:59 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ char	**unset_command(t_data *p, int j)
 	char	*env;
 	char	**cpy;
 
+	p->ret = 0;
 	if (p->ac < 2)
 		return (p->envp);
 	len = ft_strlen(p->av[j]);

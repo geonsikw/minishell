@@ -6,10 +6,11 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/22 21:42:36 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/23 17:25:09 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/02 21:54:16 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "minishell.h"
 
 char	*ft_strjoin1(char *s, char c)
@@ -52,3 +53,4 @@ int	gnl(int fd, char **line)
 	free(buffer);
 	return (flag);
 }
+*/

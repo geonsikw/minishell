@@ -6,12 +6,13 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 20:02:38 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/01 10:19:57 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/02 21:02:20 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 char	*free_join(char *dest, char *s1, char *s2)
 {
 	int		s1_len;
@@ -110,129 +111,21 @@ int	check_env(char **str, t_data *p)
 	return (0);
 }
 
-char	*read_heredoc(char *delim_token)
+void	parser(t_data *p)
 {
-	char	*heredoc;
-	char	*delim;
-	char	*line;
-
-	signal(SIGINT, nop);
-	heredoc = ft_strdup("");
-	delim = remove_quotes(delim_token);
-	while (1)
-	{
-		line = readline("> ");
-		if (!line)
-			ft_putstrs_fd("minishell: warning: here-document delimited "
-					"by end-of-file (wanted `", delim, "')\n", 2);
-		if (!line || ft_strcmp(line, delim) == 0)
-			break ;
-		heredoc = strjoin_replace(heredoc, ft_strjoin(line, "\n"));
-		free(line);
-	}
-	free(line);
-	free(delim);
-	signal(SIGINT, print_nl);
-	return (heredoc);
-}
-
-/* redirection	: '<'		WORD
- * 				| '>'		WORD
- * 				| DLESS		WORD
- * 				| DGREAT	WORD
- */
-
-int	parse_redirection(t_list **token_list, char **token, int *type, char **line)
-{
-	int	heredoc;
-
-	if (*type != '<' && *type != '>' && *type != DLESS && *type != DGREAT)
-		return (-ESYNTAX);
-	heredoc = *type == DLESS;
-	ft_lstadd_front(token_list, ft_lstnew(*token));
-	if (get_token(token, type, line) < 0)
-		return (-ETOKEN);
-	if (*type != WORD)
-		return (-ESYNTAX);
-	if (heredoc)
-	{
-		ft_lstadd_front(token_list, ft_lstnew(read_heredoc(*token)));
-		free(*token);
-	}
+	if (!p->str)
+		p->cmds = NULL;
 	else
-		ft_lstadd_front(token_list, ft_lstnew(*token));
-	if (get_token(token, type, line) < 0)
-		return (-ETOKEN);
-	return (0);
+		p->cmds = ft_strldup(p->str, ft_strlen(p->str));
+	check_env(&(p->cmds), p);
+	p->ac = count_args(p->cmds);
+	p->av = ft_calloc(sizeof(char *), p->ac + 1);
+	set_args(p->av, p->cmds, p->ac);
+	command_or_pipe(p);
+	free_matrix(p->av);
+	free(p->cmds);
 }
-
-/* command_element	: WORD
- * 					| redirection
- */
-
-int	parse_command_element(
-		t_list **token_list, char **token, int *type, char **line)
-{
-	if (*type != WORD)
-		return (parse_redirection(token_list, token, type, line));
-	ft_lstadd_front(token_list, ft_lstnew(*token));
-	if (get_token(token, type, line) < 0)
-		return (-ETOKEN);
-	return (0);
-}
-
-/* command	: command_element
- * 			| command_element	command
- */
-
-int	parse_command(t_list **token_list, char **token, int *type, char **line)
-{
-	int	err;
-
-	err = parse_command_element(token_list, token, type, line);
-	if (err)
-		return (err);
-	if (*type == '|' || *type == EOL)
-		return (0);
-	return (parse_command(token_list, token, type, line));
-}
-
-/* pipeline	: command
- * 			| command	'|'	pipeline
- */
-
-int	parse_pipeline(t_list **token_list, char **token, int *type, char **line)
-{
-	int	err;
-
-	err = parse_command(token_list, token, type, line);
-	if (err)
-		return (err);
-	if (*type != '|')
-		return (0);
-	ft_lstadd_front(token_list, ft_lstnew(*token));
-	if (get_token(token, type, line) < 0)
-		return (-ETOKEN);
-	return (parse_pipeline(token_list, token, type, line));
-}
-
-/* line	: empty
- * 		| pipeline
- */
-
-int	parse_line(t_list **token_list, char **token, int *type, char **line)
-{
-	char	*token_saved;
-	int		err;
-
-	token_saved = *token;
-	err = parse_pipeline(token_list, token, type, line);
-	if (!err)
-		return (0);
-	if (err == -ESYNTAX && *token == token_saved)
-		return (0);
-	return (err);
-}
+*/
 
 int	parse(t_list **token_list, char *line)
 {
@@ -292,7 +185,6 @@ void	parser(t_data *p)
 	{
 		p->ac = ft_lstsize(token_list);
 		p->av = get_array_from_list(&token_list, p->ac);
-		//for (int i = 0; p->av[i]; i++) printf("%s\n", p->av[i]);
 		command_or_pipe(p);
 		free_matrix(p->av);
 	}
@@ -302,20 +194,3 @@ void	parser(t_data *p)
 	p->str = 0;
 	free(p->cmds);
 }
-
-/*
-void	parser(t_data *p)
-{
-	if (!p->str)
-		p->cmds = NULL;
-	else
-		p->cmds = ft_strldup(p->str, ft_strlen(p->str));
-	check_env(&(p->cmds), p);
-	p->ac = count_args(p->cmds);
-	p->av = ft_calloc(sizeof(char *), p->ac + 1);
-	set_args(p->av, p->cmds, p->ac);
-	command_or_pipe(p);
-	free_matrix(p->av);
-	free(p->cmds);
-}
-*/

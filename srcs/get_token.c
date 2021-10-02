@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_token.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/10/02 23:18:44 by jihkwon           #+#    #+#             */
+/*   Updated: 2021/10/02 23:19:07 by jihkwon          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	get_quote_len(char *str)
@@ -21,6 +33,7 @@ int	get_token_len(char *line)
 		return (1);
 	i = 0;
 	while (iswordchar(line[i]))
+	{
 		if (isquotechar(line[i]))
 		{
 			qlen = get_quote_len(line + i);
@@ -30,6 +43,7 @@ int	get_token_len(char *line)
 		}
 		else
 			i++;
+	}
 	return (i);
 }
 

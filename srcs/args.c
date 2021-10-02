@@ -6,10 +6,11 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 20:02:48 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/28 20:32:59 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/02 21:07:16 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "minishell.h"
 
 char	**copy_args(t_data *p)
@@ -102,3 +103,4 @@ void	set_args(char **av, char *str, int ac)
 		}
 	}
 }
+*/

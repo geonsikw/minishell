@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 18:50:47 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/28 20:34:39 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/02 22:22:59 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst,
 	void *(*f)(void *), void (*del)(void *));
+t_list				*ft_lstjoin(t_list *lst1, t_list *lst2);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/30 22:15:36 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/09/30 22:19:00 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/02 23:21:55 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,28 +38,6 @@ int	redirect_in(char *op, char *word, t_data *p)
 	return (pfd[0]);
 }
 
-int	set_fd_in(t_data *p)
-{
-	int	i;
-	int	fd;
-
-	i = 0;
-	fd = 0;
-	while (p->av[i])
-		if (ft_strcmp(p->av[i], "<") == 0 || ft_strcmp(p->av[i], "<<") == 0)
-		{
-			if (fd != 0)
-				close(fd);
-			fd = redirect_in(p->av[i], p->av[i + 1], p);
-			if (fd < 0)
-				break ;
-			i += 2;
-		}
-		else
-			i += 1;
-	return (fd);
-}
-
 int	redirect_out(char *op, char *word, t_data *p)
 {
 	int		fd;
@@ -81,6 +59,30 @@ int	redirect_out(char *op, char *word, t_data *p)
 	return (fd);
 }
 
+int	set_fd_in(t_data *p)
+{
+	int	i;
+	int	fd;
+
+	i = 0;
+	fd = 0;
+	while (p->av[i])
+	{
+		if (ft_strcmp(p->av[i], "<") == 0 || ft_strcmp(p->av[i], "<<") == 0)
+		{
+			if (fd != 0)
+				close(fd);
+			fd = redirect_in(p->av[i], p->av[i + 1], p);
+			if (fd < 0)
+				break ;
+			i += 2;
+		}
+		else
+			i += 1;
+	}
+	return (fd);
+}
+
 int	set_fd_out(t_data *p)
 {
 	int	i;
@@ -89,6 +91,7 @@ int	set_fd_out(t_data *p)
 	i = 0;
 	fd = 1;
 	while (p->av[i])
+	{
 		if (ft_strcmp(p->av[i], ">") == 0 || ft_strcmp(p->av[i], ">>") == 0)
 		{
 			if (fd != 1)
@@ -100,5 +103,6 @@ int	set_fd_out(t_data *p)
 		}
 		else
 			i += 1;
+	}
 	return (fd);
 }
