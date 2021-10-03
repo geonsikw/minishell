@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:11:16 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 11:21:16 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/03 15:00:34 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	set_pipe_args(t_data *p, int i)
 	k = -1;
 	while (++k < j)
 		tmp[k] = ft_strdup(p->av[i + k]);
+	free_matrix(p->av);
 	p->av = tmp;
 	p->ac = j;
 }
@@ -32,13 +33,13 @@ void	set_pipe_args(t_data *p, int i)
 pid_t	pipe_son(int *flag, int *fds, t_data *p, int pos)
 {
 	int		i;
-	int		ac;
-	char	**av;
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
+		signal(SIGINT, sig_nop);
+		signal(SIGQUIT, sig_nop);
 		if (!flag[0])
 			dup2(fds[0], 0);
 		if (!flag[1])
@@ -46,13 +47,9 @@ pid_t	pipe_son(int *flag, int *fds, t_data *p, int pos)
 		i = 0;
 		while (i < 4)
 			close(fds[i++]);
-		ac = p->ac;
-		av = p->av;
 		set_pipe_args(p, pos);
 		check_command(p->str, p);
 		free_matrix(p->av);
-		p->ac = ac;
-		p->av = av;
 		exit(p->ret);
 	}
 	return (pid);
