@@ -6,7 +6,7 @@
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 23:16:32 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/03 17:32:03 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/03 18:01:36 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	exit_command(t_data *p)
 	{
 		ft_putstrs_fd(
 			"minishell: exit: ", p->av[1], ": numeric argument required\n", 2);
-		exitcode = 2;
+		exitcode = 255;
 	}
 	else if (p->ac != 2)
 	{
