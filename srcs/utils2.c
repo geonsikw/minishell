@@ -6,10 +6,11 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 13:04:51 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/03 17:31:17 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <limits.h>
 #include "minishell.h"
 
 int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
@@ -23,10 +24,31 @@ int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
 	return (1);
 }
 
-int	digits_only(char *str)
+int	ft_atoll(long long *n, const char *str)
 {
-	while (ft_isdigit(*str))
+	unsigned long long	abs;
+	int					sign;
+
+	while (ft_isspace(*str))
 		str++;
+	sign = 1;
+	if (*str == '-')
+		sign = -1;
+	if (*str == '-' || *str == '+')
+		str++;
+	if (!ft_isdigit(*str))
+		return (0);
+	abs = 0;
+	while (ft_isdigit(*str))
+	{
+		abs = abs * 10 + (unsigned long long)*str++ - '0';
+		if ((sign == 1 && abs > LLONG_MAX)
+			|| (sign == -1 && abs > -(unsigned long long)LLONG_MIN))
+			return (0);
+	}
+	while (ft_isspace(*str))
+		str++;
+	*n = sign * (long long)abs;
 	return (!*str);
 }
 
