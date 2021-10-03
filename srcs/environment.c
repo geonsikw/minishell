@@ -6,13 +6,13 @@
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 23:15:44 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/02 23:15:50 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/03 21:22:37 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**update_envp(t_data *p, int j)
+char	**update_envp(t_data *p, int j, int flag)
 {
 	int		i;
 	char	**cpy;
@@ -29,9 +29,14 @@ char	**update_envp(t_data *p, int j)
 	}
 	else
 	{
-		cpy = p->envp;
-		free(p->envp[i]);
-		p->envp[i] = ft_strjoin(p->av[j], p->av[j + 1]);
+		if (flag != 1)
+		{
+			cpy = p->envp;
+			free(p->envp[i]);
+			p->envp[i] = ft_strjoin(p->av[j], p->av[j + 1]);
+		}
+		else
+			return (p->envp);
 	}
 	return (cpy);
 }

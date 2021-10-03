@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/16 16:23:51 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 12:55:52 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/03 21:20:41 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,17 @@
 void	export_value(t_data *p, int *i)
 {
 	char	*join;
+	int		flag;
 
+	flag = 0;
 	if (!ft_strchr(p->av[*i], '='))
 	{
+		flag = 1;
 		join = ft_strjoin(p->av[*i], "=");
 		free(p->av[*i]);
 		p->av[*i] = join;
 	}
-	p->envp = update_envp(p, *i);
+	p->envp = update_envp(p, *i, flag);
 	if (p->av[*i + 1])
 		*i += 2;
 	else
