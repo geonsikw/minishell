@@ -6,7 +6,7 @@
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 23:19:27 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/02 23:19:43 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/03 14:28:37 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,6 @@ char	*read_heredoc(char *delim_token)
 	}
 	free(line);
 	free(delim);
-	signal(SIGINT, sig_print_nl);
+	signal(SIGINT, sig_print_ctrl_c);
 	return (heredoc);
 }

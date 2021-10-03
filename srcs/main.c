@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:27:12 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 13:02:25 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/03 14:27:51 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,14 @@ int	main(int ac, char **av, char **envp)
 	if (ac != 1)
 		return (1);
 	config_terminal();
-	signal(SIGQUIT, sig_nop);
 	init_p(&p, av, envp);
 	while (1)
 	{
 		signal(SIGINT, sig_new_prompt);
+		signal(SIGQUIT, sig_nop);
 		p.str = readline("prompt$ ");
-		signal(SIGINT, sig_print_nl);
+		signal(SIGINT, sig_print_ctrl_c);
+		signal(SIGQUIT, sig_msg_quit);
 		if (!p.str)
 		{
 			free(p.export);

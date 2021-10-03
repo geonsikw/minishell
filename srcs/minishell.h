@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 13:03:27 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/03 14:28:04 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,9 @@ void			free_matrix(char **matrix);
 
 /* signal_handler.c */
 void			sig_new_prompt(int sig);
-void			sig_print_nl(int sig);
+void			sig_print_ctrl_c(int sig);
 void			sig_nop(int sig);
+void			sig_msg_quit(int sig);
 
 /* unset.c */
 char			**unset_command(t_data *p, int j);
