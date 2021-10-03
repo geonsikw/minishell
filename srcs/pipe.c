@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:11:16 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:35:27 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/03 11:21:16 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,15 @@ void	set_pipe_args(t_data *p, int i)
 	p->ac = j;
 }
 
-void	pipe_son(int *flag, int *fds, t_data *p, int pos)
+pid_t	pipe_son(int *flag, int *fds, t_data *p, int pos)
 {
 	int		i;
 	int		ac;
 	char	**av;
+	pid_t	pid;
 
-	if (!fork())
+	pid = fork();
+	if (pid == 0)
 	{
 		if (!flag[0])
 			dup2(fds[0], 0);
@@ -53,6 +55,7 @@ void	pipe_son(int *flag, int *fds, t_data *p, int pos)
 		p->av = av;
 		exit(p->ret);
 	}
+	return (pid);
 }
 
 void	switch_pipes(int *fds)
@@ -64,16 +67,16 @@ void	switch_pipes(int *fds)
 	pipe(&fds[2]);
 }
 
-int	check_pipe(int *fds, t_data *p)
+int	check_pipe(pid_t *lastpid, int *fds, t_data *p)
 {
 	int		sons;
-	int		*flag;
+	int		flag[2];
 	int		i;
 	int		j;
 
 	sons = 0;
-	flag = (int *)calloc(sizeof(int), 2);
 	flag[0] = 1;
+	flag[1] = 0;
 	j = 0;
 	while (p->av[j])
 	{
@@ -82,37 +85,37 @@ int	check_pipe(int *fds, t_data *p)
 			i++;
 		if (!p->av[j + i])
 			flag[1] = 1;
-		pipe_son(flag, fds, p, j);
+		*lastpid = pipe_son(flag, fds, p, j);
 		sons++;
 		flag[0] = 0;
 		switch_pipes(fds);
 		if (!p->av[j + i])
-			j += i;
-		else
-			j += i + 1;
+			break ;
+		j += i + 1;
 	}
-	free(flag);
 	return (sons);
 }
 
 void	command_or_pipe(t_data *p)
 {
-	int	fds[4];
-	int	sons;
-	int	i;
+	int		fds[4];
+	int		sons;
+	int		i;
+	pid_t	lastpid;
 
 	i = 0;
 	while (p->av[i] && ft_memcmp(p->av[i], "|", 2))
 		i++;
 	if (!p->av[i])
 		p->envp = check_command(p->cmds, p);
-	else if (p->cmds[0])
+	else if (p->cmds)
 	{
 		pipe(&fds[0]);
 		pipe(&fds[2]);
-		sons = check_pipe(fds, p);
-		while (sons-- > 0)
-			wait(&p->ret);
+		sons = check_pipe(&lastpid, fds, p);
+		waitpid(lastpid, &p->ret, 0);
+		while (--sons > 0)
+			wait(0);
 		p->ret /= 256;
 		i = -1;
 		while (++i < 4)

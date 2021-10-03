@@ -6,48 +6,43 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 17:06:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:19:36 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/03 12:55:02 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**export_command(t_data *p, int j)
-{
-	int		i;
-	char	**cpy;
-
-	i = 0;
-	while (p->envp[i] && ft_memcmp(p->envp[i],
-			p->av[j], ft_strlen(p->av[j])))
-		i++;
-	cpy = p->envp;
-	free(p->envp[i]);
-	p->envp[i] = ft_strjoin(p->av[j], p->av[j + 1]);
-	return (cpy);
-}
-
 void	change_dir(char *path, t_data *p)
 {
 	char		cwd[4097];
+	char		oldpwd[4097];
 
+	getcwd(oldpwd, 4096);
 	if (chdir(path) == 0)
 	{
-		p->ac = 3;
+		p->ac = 4;
 		free_matrix(p->av);
-		p->av = (char **)ft_calloc(sizeof(char *), 3);
-		p->av[0] = ft_strdup("PWD=");
-		p->av[1] = ft_strdup(getcwd(cwd, 4096));
-		p->envp = export_command(p, 0);
+		p->av = (char **)ft_calloc(sizeof(char *), 4);
+		p->av[0] = ft_strdup("export");
+		p->av[1] = ft_strdup("OLDPWD=");
+		p->av[2] = ft_strdup(oldpwd);
+		p->envp = update_envp(p, 1);
+		free_matrix(p->av);
+		p->av = (char **)ft_calloc(sizeof(char *), 4);
+		p->av[0] = ft_strdup("export");
+		p->av[1] = ft_strdup("PWD=");
+		p->av[2] = ft_strdup(getcwd(cwd, 4096));
+		p->envp = update_envp(p, 1);
 	}
 	else
-		ft_putstrs_fd("bash: cd: ", p->av[1], ": ", 2);
+		ft_putstrs_fd("minishell: cd: ", p->av[1], ": ", 2);
 }
 
 void	cd_command(t_data *p)
 {
 	char	*path;
 
+	p->ret = 0;
 	errno = 0;
 	if (p->ac <= 2)
 	{
@@ -61,7 +56,7 @@ void	cd_command(t_data *p)
 	}
 	else
 	{
-		ft_putstr_fd("bash: cd: too many arguments\n", 2);
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
 		p->ret = 1;
 	}
 	errno = 0;

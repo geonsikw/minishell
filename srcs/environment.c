@@ -1,16 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   environment.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
+/*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:20:46 by gwoo             ###   ########.fr       */
+/*   Created: 2021/10/02 23:15:44 by jihkwon           #+#    #+#             */
+/*   Updated: 2021/10/02 23:15:50 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**update_envp(t_data *p, int j)
+{
+	int		i;
+	char	**cpy;
+
+	i = 0;
+	while (p->envp[i] && ft_memcmp(p->envp[i],
+			p->av[j], ft_strlen(p->av[j])))
+		i++;
+	if (!p->envp[i])
+	{
+		cpy = copy_env(p->envp, 1);
+		cpy[i] = ft_strjoin(p->av[j], p->av[j + 1]);
+		free_matrix(p->envp);
+	}
+	else
+	{
+		cpy = p->envp;
+		free(p->envp[i]);
+		p->envp[i] = ft_strjoin(p->av[j], p->av[j + 1]);
+	}
+	return (cpy);
+}
 
 char	*get_env(char **envp, char *env)
 {
@@ -41,19 +65,10 @@ char	**copy_env(char **envp, int add)
 	while (envp[len])
 		len++;
 	cpy = (char **)ft_calloc(sizeof(char *), (len + add + 1));
+	if (!cpy)
+		return (NULL);
 	i = -1;
 	while (++i < len)
 		cpy[i] = ft_strdup(envp[i]);
 	return (cpy);
-}
-
-int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
-{
-	if (before)
-		write(fd, before, ft_strlen(before));
-	if (str)
-		write(fd, str, ft_strlen(str));
-	if (after)
-		write(fd, after, ft_strlen(after));
-	return (1);
 }

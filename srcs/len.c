@@ -1,42 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   len.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/13 20:02:38 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:29:04 by gwoo             ###   ########.fr       */
+/*   Created: 2021/09/13 22:38:11 by gwoo              #+#    #+#             */
+/*   Updated: 2021/10/03 13:01:16 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*copy_str(char *s)
+void	ft_putstrlen_fd(char *s, int len, int fd)
 {
-	char	*str;
+	int	i;
 
-	if (!s)
-		return (NULL);
-	str = (char *)ft_calloc(sizeof(char), 2);
-	str = ft_strldup(s, ft_strlen(s));
-	return (str);
+	if (!s || !fd)
+		return ;
+	i = 0;
+	while (s[i] && i < len)
+	{
+		write(fd, &s[i], 1);
+		i++;
+	}
 }
 
-void	parser(t_data *p)
+int	ft_strlen_char(char *str, char c)
 {
 	int	i;
 
 	i = 0;
-	p->cmds = copy_str(p->str);
-	p->ac = count_args(p->cmds);
-	p->av = (char **)ft_calloc(sizeof(char *), (p->ac + 1));
-	set_args(p->av, p->cmds, p->ac);
-	while (p->av[i])
+	while (str[i] && str[i] != c)
 		i++;
-	command_or_pipe(p);
-	free_matrix(p->av);
-	free(p->str);
-	p->str = 0;
-	free(p->cmds);
+	return (i);
 }

@@ -5,56 +5,64 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/09/13 22:38:11 by gwoo              #+#    #+#             */
-/*   Updated: 2021/09/16 04:30:33 by gwoo             ###   ########.fr       */
+/*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
+/*   Updated: 2021/10/03 13:04:51 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	rm_char(char **str, int j)
+int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
 {
-	char	*bef;
-	char	*aft;
-
-	bef = ft_strldup(*str, j);
-	aft = ft_strdup(*str + j + 1);
-	free(*str);
-	*str = ft_strjoin(bef, aft);
-	free(aft);
-	free(bef);
+	if (before)
+		write(fd, before, ft_strlen(before));
+	if (str)
+		write(fd, str, ft_strlen(str));
+	if (after)
+		write(fd, after, ft_strlen(after));
+	return (1);
 }
 
-int	ft_strlen_char(char *str, char c)
+int	digits_only(char *str)
 {
-	int	i;
+	while (ft_isdigit(*str))
+		str++;
+	return (!*str);
+}
+
+char	*getname(char **word)
+{
+	int		i;
+	char	*name;
 
 	i = 0;
-	while (str[i] && str[i] != c)
+	if (ft_isalpha((*word)[i]))
+		while (ft_isalnum((*word)[++i]) || (*word)[i] == '_')
+			;
+	name = ft_strldup((*word), i);
+	*word += i;
+	return (name);
+}
+
+char	*strjoin_replace(char *s1, char *s2)
+{
+	char	*join;
+
+	join = ft_strjoin(s1, s2);
+	free(s1);
+	free(s2);
+	return (join);
+}
+
+char	*ft_strtok(char **str, char *delim)
+{
+	int		i;
+	char	*res;
+
+	i = 0;
+	while (!ft_strchr(delim, (*str)[i]))
 		i++;
-	return (i);
-}
-
-void	free_matrix(char **matrix)
-{
-	int	i;
-
-	i = 0;
-	if (!matrix)
-		return ;
-	while (matrix[i])
-		free(matrix[i++]);
-	free(matrix);
-}
-
-void	ft_addchr(char **str, char c)
-{
-	char	*tmp;
-
-	tmp = ft_calloc(sizeof(char), ft_strlen(*str) + 2);
-	ft_memcpy(tmp, *str, ft_strlen(*str));
-	tmp[ft_strlen(tmp)] = c;
-	if (*str)
-		free(*str);
-	*str = tmp;
+	res = ft_strldup(*str, i);
+	*str += i;
+	return (res);
 }
