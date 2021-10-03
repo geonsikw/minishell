@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 14:27:12 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 14:27:51 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/03 15:24:37 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int	main(int ac, char **av, char **envp)
 		{
 			free(p.export);
 			free_matrix(p.envp);
-			ft_putendl_fd("exit", 1);
+			ft_putendl_fd("exit", 2);
 			return (0);
 		}
 		if (p.str[0])
