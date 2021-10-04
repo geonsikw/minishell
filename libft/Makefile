@@ -6,15 +6,14 @@
 #    By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/19 18:52:09 by gwoo              #+#    #+#              #
-#    Updated: 2021/10/02 22:51:35 by jihkwon          ###   ########.fr        #
+#    Updated: 2021/10/04 19:25:01 by jihkwon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address
-#CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
 RM = rm -f
 

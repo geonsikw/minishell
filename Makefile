@@ -6,7 +6,7 @@
 #    By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/02 23:26:31 by jihkwon           #+#    #+#              #
-#    Updated: 2021/10/03 12:24:07 by gwoo             ###   ########.fr        #
+#    Updated: 2021/10/04 19:24:18 by jihkwon          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,7 @@ OBJS = $(SRCS:.c=.o)
 
 CC = gcc
 
-CFLAGS = -Wall -Werror -Wextra -fsanitize=address
+CFLAGS = -Wall -Werror -Wextra
 #CFLAGS = -Wall -Werror -Wextra
 
 RM = rm -rf
