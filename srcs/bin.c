@@ -6,12 +6,13 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 14:27:05 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 12:56:23 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/04 12:18:13 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 void	exec_bin(int fdin, int fdout, char *path, t_data *p)
 {
 	if (!fork())
@@ -99,5 +100,71 @@ int	check_bin(int fdin, int fdout, t_data *p)
 		closedir(dir);
 	}
 	free(pre_path);
+	return (p->ret);
+}
+*/
+
+void	search_exec(char **paths, char *file, char *argv[], char *envp[])
+{
+	char	*path;
+	char	*lastfound;
+	int		err;
+	int		i;
+
+	lastfound = 0;
+	err = ENOENT;
+	i = -1;
+	while (paths[++i])
+	{
+		path = strjoin_path(paths[i], file);
+		execve(path, argv, envp);
+		if (errno != ENOENT)
+		{
+			err = errno;
+			free(lastfound);
+			lastfound = ft_strdup(path);
+		}
+		free(path);
+	}
+	errno = err;
+	if (err == ENOENT)
+		return (ft_putstrs_fd("minishell: ", file, ": command not found\n", 2));
+	perror2("minishell", lastfound);
+	free(lastfound);
+}
+
+void	ft_execvpe(char *path, char *argv[], char *envp[])
+{
+	char	*path_env;
+	char	**paths;
+
+	path_env = get_env(envp, "PATH");
+	if (ft_strchr(path, '/') || !path_env || !path_env[0])
+	{
+		execve(path, argv, envp);
+		return (perror2("minishell", path));
+	}
+	paths = ft_split(path_env, ':');
+	search_exec(paths, path, argv, envp);
+	free_matrix(paths);
+}
+
+int	check_bin(int fdin, int fdout, t_data *p)
+{
+	if (fork() == 0)
+	{
+		dup2(fdin, 0);
+		dup2(fdout, 1);
+		if (fdin != 0)
+			close(fdin);
+		if (fdout != 1)
+			close(fdout);
+		ft_execvpe(p->av[0], p->av, p->envp);
+		if (errno == ENOENT)
+			exit(127);
+		exit(126);
+	}
+	wait(&p->ret);
+	p->ret /= 256;
 	return (p->ret);
 }

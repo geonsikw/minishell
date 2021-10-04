@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 21:31:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 14:58:31 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/03 23:33:20 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,7 @@ char	**check_command(char *str, t_data *p)
 	if (!p->av[0] || !*(p->av[0]))
 		return (p->envp);
 	if (check_builtins(fdout, p) < 0 && check_bin(fdin, fdout, p) == 127)
-	{
-		ft_putstrs_fd("minishell: ", p->av[0], ": command not found\n", 2);
 		p->ret = 127;
-	}
 	if (fdin != 0)
 		close (fdin);
 	if (fdout != 1)

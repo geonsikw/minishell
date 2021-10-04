@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 17:01:52 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/04 12:18:40 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ char			**copy_env(char **envp, int add);
 
 /* error_message.c */
 void			errmsg_syntax(char *token);
+void			perror2(char *s1, char *s2);
 
 /* excutable.c */
 
@@ -145,9 +146,10 @@ char			**unset_command(t_data *p, int j);
 int				isopchar(char c);
 int				isquotechar(char c);
 int				iswordchar(char c);
+char			*strjoin_path(char *dir, char *file);
 
 /* utils2.c */
-int				ft_putstrs_fd(char *before, char *str, char *after, int fd);
+void			ft_putstrs_fd(char *before, char *str, char *after, int fd);
 int				ft_atoll(long long *n, const char *str);
 char			*getname(char **word);
 char			*strjoin_replace(char *s1, char *s2);

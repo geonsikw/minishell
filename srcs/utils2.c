@@ -6,14 +6,14 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 20:03:10 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 17:31:17 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/04 00:17:35 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <limits.h>
 #include "minishell.h"
 
-int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
+void	ft_putstrs_fd(char *before, char *str, char *after, int fd)
 {
 	if (before)
 		write(fd, before, ft_strlen(before));
@@ -21,7 +21,6 @@ int	ft_putstrs_fd(char *before, char *str, char *after, int fd)
 		write(fd, str, ft_strlen(str));
 	if (after)
 		write(fd, after, ft_strlen(after));
-	return (1);
 }
 
 int	ft_atoll(long long *n, const char *str)
