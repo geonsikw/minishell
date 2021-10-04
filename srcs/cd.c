@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/14 17:06:45 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/03 12:55:02 by gwoo             ###   ########.fr       */
+/*   Updated: 2021/10/03 21:20:24 by gwoo             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void	change_dir(char *path, t_data *p)
 		p->av[0] = ft_strdup("export");
 		p->av[1] = ft_strdup("OLDPWD=");
 		p->av[2] = ft_strdup(oldpwd);
-		p->envp = update_envp(p, 1);
+		p->envp = update_envp(p, 1, 0);
 		free_matrix(p->av);
 		p->av = (char **)ft_calloc(sizeof(char *), 4);
 		p->av[0] = ft_strdup("export");
 		p->av[1] = ft_strdup("PWD=");
 		p->av[2] = ft_strdup(getcwd(cwd, 4096));
-		p->envp = update_envp(p, 1);
+		p->envp = update_envp(p, 1, 0);
 	}
 	else
 		ft_putstrs_fd("minishell: cd: ", p->av[1], ": ", 2);

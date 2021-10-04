@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/04 12:18:40 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/04 12:47:56 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void			echo_command(t_data *p, int fd);
 void			env_command(t_data *p, int fd);
 
 /* environment.c */
-char			**update_envp(t_data *p, int j);
+char			**update_envp(t_data *p, int j, int flag);
 char			*get_env(char **envp, char *env);
 char			**copy_env(char **envp, int add);
 
