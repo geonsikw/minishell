@@ -6,13 +6,13 @@
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 23:25:33 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/02 23:25:36 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/04 16:41:29 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*expand_param(char **word, char *envp[], int exitcode)
+char	*expand_param(char **word, char *envp[], int exitcode, int quoted)
 {
 	char	*value;
 	char	*name;
@@ -27,7 +27,7 @@ char	*expand_param(char **word, char *envp[], int exitcode)
 		free(name);
 		return (ft_strdup(value));
 	}
-	if (isquotechar(**word))
+	if (isquotechar(**word) && !quoted)
 		return (ft_strdup(""));
 	if (**word == '?')
 	{
@@ -49,7 +49,8 @@ char	*expand_quote(char **word, char *envp[], int exitcode)
 		while (**word != '"')
 		{
 			if (**word == '$')
-				res = strjoin_replace(res, expand_param(word, envp, exitcode));
+				res = strjoin_replace(
+						res, expand_param(word, envp, exitcode, 1));
 			else
 				res = strjoin_replace(res, ft_strtok(word, "\"$"));
 		}

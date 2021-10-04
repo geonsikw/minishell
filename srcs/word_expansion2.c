@@ -6,7 +6,7 @@
 /*   By: jihkwon <jihkwon@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/02 23:23:36 by jihkwon           #+#    #+#             */
-/*   Updated: 2021/10/02 23:24:04 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/04 16:38:44 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_list	*expand_split_param(char **word, char *envp[], int exitcode)
 	char	*param_exp;
 	t_list	*list;
 
-	param_exp = expand_param(word, envp, exitcode);
+	param_exp = expand_param(word, envp, exitcode, 0);
 	list = split_to_list(param_exp);
 	free(param_exp);
 	return (list);

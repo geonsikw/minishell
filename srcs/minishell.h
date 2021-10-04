@@ -6,7 +6,7 @@
 /*   By: gwoo <gwoo@student.42seoul.kr>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/12 13:12:09 by gwoo              #+#    #+#             */
-/*   Updated: 2021/10/04 12:47:56 by jihkwon          ###   ########.fr       */
+/*   Updated: 2021/10/04 16:40:38 by jihkwon          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,8 @@ void			expand_args(t_data *p);
 t_list			*expand_word(char *word, char *envp[], int exitcode);
 
 /* word_expansion3.c */
-char			*expand_param(char **word, char *envp[], int exitcode);
+char			*expand_param(char **word, char *envp[], int exitcode,
+					int quoted);
 char			*expand_quote(char **word, char *envp[], int exitcode);
 t_list			*split_to_list(char *str);
 #endif
